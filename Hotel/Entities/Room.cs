@@ -9,6 +9,7 @@ namespace Hotel.Entities
 {
     public class Room
     {
+        [Key]
         public int RoomNumber { get; set; } 
         public Booking Booking { get; set; } 
         public int RoomSize { get; set; } 
