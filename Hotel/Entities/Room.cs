@@ -9,10 +9,11 @@ namespace Hotel.Entities
 {
     public class Room
     {
-        public int RoomNumber { get; set; }
-        public Booking Booking { get; set; }
-        public int RoomSize { get; set; }
-        public string BedType { get; set; }
-        public int ExtraBed { get; set; }
+        public int RoomNumber { get; set; } 
+        public Booking Booking { get; set; } 
+        public int RoomSize { get; set; } 
+        public string BedType { get; set; } 
+        public int ExtraBed { get; set; } 
+        public bool IsAvailable { get; set; } 
     }
 }

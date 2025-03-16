@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace Hotel.Entities
 {
-    internal class Booking
+    public class Booking
     {
+        public int BookingID { get; set; }
+        public DateTime CheckIn { get; set; }
+        public DateTime CheckOut { get; set; }
+        public int NumberOfGuests { get; set; }
+        public bool IsPaid { get; set; }
+        public List<Room> Rooms { get; set; }
+        public List<Guest> Guests { get; set; }
     }
 }
