@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Hotel.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Hotel.Data
 {
-    internal class ApplicationDbContex : DbContext
+    public class ApplicationDbContex : DbContext
     {
-        public DbSet<Entities.Booking> Bookings { get; set; } = null!;
-        public DbSet<Entities.Guest> Guests { get; set; } = null!;
-        public DbSet<Entities.Room> Rooms { get; set; } = null!;
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Guest> Guests { get; set; }
+        public DbSet<Room> Rooms { get; set; }
     }
 }
