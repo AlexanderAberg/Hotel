@@ -1,4 +1,8 @@
-﻿using EFCore_Code_First_Tutorial.Data;
+﻿using Hotel.Menu;
+using Hotel.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using EFCore_Code_First_Tutorial.Data;
 
 namespace Hotel
 {
@@ -6,7 +10,12 @@ namespace Hotel
     {
         static void Main(string[] args)
         {
-            DataInitializer.Build();
+            using (var dbContext = DataInitializer.Build())
+            {
+                DataInitializer.InitializeData(dbContext);
+                var menu = new Menu(dbContext);
+                menu.Start();
+            }
         }
     }
 }
