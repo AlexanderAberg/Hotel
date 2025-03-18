@@ -57,7 +57,7 @@ namespace Hotel.Controller
                 LastName = lastName,
                 Email = email,
                 City = city,
-                PhoneNumber = phone,
+                Phone = phone,
                 Room = selectedRoom
             };
 
