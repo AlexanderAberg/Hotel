@@ -18,7 +18,7 @@ namespace Hotel.Services
             _dbContext = dbContext;
         }
 
-        public void CreateStudent(Guest guest)
+        public void CreateGuest(Guest guest)
         {
 
             _dbContext.Guests.Add(guest);

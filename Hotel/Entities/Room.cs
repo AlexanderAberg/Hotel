@@ -15,6 +15,5 @@ namespace Hotel.Entities
         public int RoomSize { get; set; } 
         public string BedType { get; set; } 
         public int ExtraBed { get; set; } 
-        public bool IsAvailable { get; set; } 
     }
 }

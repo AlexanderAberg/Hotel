@@ -10,14 +10,14 @@ namespace Hotel.Controller
 {
     public class GuestController
     {
-        private GuestService _studentService;
+        private GuestService _guestService;
 
         public GuestController(GuestService guestService)
         {
             _guestService = guestService;
         }
 
-        public void RegisterNewStudent()
+        public void RegisterNewGuest()
         {
             Console.WriteLine("Skriv in gästens uppgifter: ");
 
@@ -35,30 +35,29 @@ namespace Hotel.Controller
             Console.Write(">");
             var phone = Console.ReadLine();
 
-            var availableRooms = _guestService.GetRooms();
+            var availableBookings = _guestService.GetRooms();
 
 
             Console.WriteLine($"{Environment.NewLine}Välj rum:");
 
             var counter = 1;
-            foreach (var course in availableRooms)
+            foreach (var booking in availableBookings)
             {
-                Console.WriteLine($"{counter}. {room.RoomNumber}");
+                Console.WriteLine($"{counter}. {booking.Booking}");
                 counter++;
             }
 
-            var selection = ValidateSelection(availableRooms.Count);
+            var selection = ValidateSelection(availableBookings.Count);
 
-            var selectedCourse = availableRooms[selection - 1];
+            var selectedBooking = availableBookings[selection - 1];
 
-            var newStudent = new Guest
+            var newGuest = new Guest
             {
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
                 City = city,
                 Phone = phone,
-                Room = selectedRoom
             };
 
             _guestService.CreateGuest(newGuest);
@@ -95,6 +94,16 @@ namespace Hotel.Controller
         }
 
         public void ListGuests()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CheckInGuest()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CheckOutGuest()
         {
             throw new NotImplementedException();
         }

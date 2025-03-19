@@ -9,7 +9,7 @@ namespace Hotel.Entities
 {
     public class Guest
     {
-        public int GuestID { get; set; }
+        public int GuestId { get; set; }
         public Booking Booking { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
