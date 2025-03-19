@@ -1,4 +1,4 @@
-﻿using Hotel.Menu;
+﻿using Hotel.Menus;
 using Hotel.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
