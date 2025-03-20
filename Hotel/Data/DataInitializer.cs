@@ -27,7 +27,7 @@ namespace Hotel.Data
 
             using var dbContext = new ApplicationDbContext(contextOptions);
 
-            dbContext.Database.Migrate();
+            // dbContext.Database.Migrate();
 
             return dbContext;
         }
@@ -53,8 +53,38 @@ namespace Hotel.Data
             dbContext.Bookings.Add(new Booking
             {
                 CheckIn = new DateTime(2025, 3, 27),
-                CheckOut = new DateTime(2025, 4, 1),
+                CheckOut = new DateTime(2025, 4, 3),
+                NumberOfGuests = 1,
+                IsPaid = true,
+                Rooms = new List<Room>(),
+                Guests = new List<Guest>()
+            });
+
+            dbContext.Bookings.Add(new Booking
+            {
+                CheckIn = new DateTime(2025, 4, 1),
+                CheckOut = new DateTime(2025, 4, 5),
                 NumberOfGuests = 2,
+                IsPaid = true,
+                Rooms = new List<Room>(),
+                Guests = new List<Guest>()
+            });
+
+            dbContext.Bookings.Add(new Booking
+            {
+                CheckIn = new DateTime(2025, 4, 5),
+                CheckOut = new DateTime(2025, 4, 13),
+                NumberOfGuests = 4,
+                IsPaid = true,
+                Rooms = new List<Room>(),
+                Guests = new List<Guest>()
+            });
+
+            dbContext.Bookings.Add(new Booking
+            {
+                CheckIn = new DateTime(2025, 4, 10),
+                CheckOut = new DateTime(2025, 4, 15),
+                NumberOfGuests = 3,
                 IsPaid = true,
                 Rooms = new List<Room>(),
                 Guests = new List<Guest>()
