@@ -35,7 +35,6 @@ namespace Hotel.Data
         {
             if (!IfAnyDataExists(dbContext))
             {
-                GenerateBookings(dbContext);
                 GenerateGuests(dbContext);
                 GenerateRooms(dbContext);
             }
