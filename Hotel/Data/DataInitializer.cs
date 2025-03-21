@@ -57,7 +57,6 @@ namespace Hotel.Data
                 Email = "kalle@hotmail.se",
                 City = "Stockholm",
                 Phone = "07o012334567",
-                Booking = dbContext.Bookings.FirstOrDefault(c => c.BookingId == 100001)!
             });
 
             dbContext.Guests.Add(new Guest
@@ -67,7 +66,6 @@ namespace Hotel.Data
                 Email = "anna@hotmail.com",
                 City = "Stockholm",
                 Phone = "07o4122339567",
-                Booking = dbContext.Bookings.FirstOrDefault(c => c.BookingId == 100002)!
             });
 
             dbContext.Guests.Add(new Guest
@@ -77,7 +75,6 @@ namespace Hotel.Data
                 Email = "joel@hotmail.com",
                 City = "Sundbyberg",
                 Phone = "07o4122332567",
-                Booking = dbContext.Bookings.FirstOrDefault(c => c.BookingId == 100003)!
             });
 
             dbContext.Guests.Add(new Guest
@@ -87,7 +84,6 @@ namespace Hotel.Data
                 Email = "max@hotmail.com",
                 City = "Sundbyberg",
                 Phone = "07o4122332647",
-                Booking = dbContext.Bookings.FirstOrDefault(c => c.BookingId == 100004)!
             });
 
             dbContext.SaveChanges();
@@ -103,7 +99,6 @@ namespace Hotel.Data
                 RoomSize = 10,
                 BedType = "Enkelsäng",
                 ExtraBed = 0,
-                Booking = dbContext.Bookings.FirstOrDefault(c => c.IsAvailable == true)!
             });
 
             dbContext.Rooms.Add(new Room
@@ -112,7 +107,6 @@ namespace Hotel.Data
                 RoomSize = 19,
                 BedType = "Dubbelsäng",
                 ExtraBed = 0,
-                Booking = dbContext.Bookings.FirstOrDefault(c => c.IsAvailable == true)!
             });
 
             dbContext.Rooms.Add(new Room
@@ -121,7 +115,6 @@ namespace Hotel.Data
                 RoomSize = 25,
                 BedType = "Dubbelsäng",
                 ExtraBed = 2,
-                Booking = dbContext.Bookings.FirstOrDefault(c => c.IsAvailable == true)!
             });
 
             dbContext.Rooms.Add(new Room
@@ -130,7 +123,6 @@ namespace Hotel.Data
                 RoomSize = 19,
                 BedType = "Dubbelsäng",
                 ExtraBed = 1,
-                Booking = dbContext.Bookings.FirstOrDefault(c => c.IsAvailable == true)!
             });
 
             dbContext.SaveChanges();
