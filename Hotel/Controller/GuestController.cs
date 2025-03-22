@@ -21,9 +21,11 @@ namespace Hotel.Controller
         {
             Console.WriteLine("Skriv in gästens uppgifter: ");
 
-            Console.WriteLine($"{Environment.NewLine}Namn:");
+            Console.WriteLine($"{Environment.NewLine}Förnamn:");
             Console.Write(">");
             var firstName = Console.ReadLine();
+            Console.WriteLine($"{Environment.NewLine}Förnamn:");
+            Console.Write(">");
             var lastName = Console.ReadLine();
             Console.Write(">");
             Console.WriteLine($"{Environment.NewLine}Email:");
