@@ -8,7 +8,14 @@ namespace Hotel.Entities
 {
     public class Booking
     {
-        public int BookingId { get; set; }
+        private static int _nextBookingId = 0000001;
+
+        public Booking()
+        {
+            BookingId = _nextBookingId++;
+        }
+
+        public int BookingId { get; private set; }
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
         public int NumberOfGuests { get; set; }
@@ -17,5 +24,10 @@ namespace Hotel.Entities
         public List<Guest> Guests { get; set; }
         public bool IsAvailable { get; internal set; }
         public object Room { get; internal set; }
+
+        public string GetFormattedBookingId()
+        {
+            return BookingId.ToString("D7");
+        }
     }
 }
