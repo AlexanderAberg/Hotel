@@ -21,12 +21,114 @@ namespace Hotel.Controller
 
         public void CheckInGuest()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Ange gästens ID för att checka in gästen:");
+            Console.Write("> ");
+            if (int.TryParse(Console.ReadLine(), out int guestId))
+            {
+                var guest = _guestService.GetGuest(guestId);
+                if (guest != null)
+                {
+                    var booking = guest.Booking;
+                    if (booking != null && booking.Rooms.Any())
+                    {
+                        if (booking.CheckInDate.Date == DateTime.Now.Date)
+                        {
+                            Console.WriteLine($"{Environment.NewLine}Välj rum att checka in i:");
+                            var counter = 1;
+                            foreach (var room in booking.Rooms)
+                            {
+                                Console.WriteLine($"{counter}. {room.RoomNumber}");
+                                counter++;
+                            }
+                            var selection = ValidateSelection(booking.Rooms.Count);
+                            var selectedRoom = booking.Rooms[selection - 1];
+                            if (selectedRoom.Booking == null)
+                            {
+                                selectedRoom.Booking = booking;
+                                booking.CheckInDate = DateTime.Now;
+                                _bookingService.UpdateBooking(booking.BookingId);
+                                Console.WriteLine("Gästen har checkats in!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Rummet är redan upptaget.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Du kan bara checka in på incheckningsdagen.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Gästen har inga bokade rum.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Gäst hittades inte.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt ID.");
+            }
         }
 
         public void CheckOutGuest()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Ange gästens ID för att checka ut gästen:");
+            Console.Write("> ");
+            if (int.TryParse(Console.ReadLine(), out int guestId))
+            {
+                var guest = _guestService.GetGuest(guestId);
+                if (guest != null)
+                {
+                    var booking = guest.Booking;
+                    if (booking != null && booking.Rooms.Any())
+                    {
+                        if (booking.CheckInDate.Date == DateTime.Now.Date)
+                        {
+                            Console.WriteLine($"{Environment.NewLine}Välj rum att checka ut från:");
+                            var counter = 1;
+                            foreach (var room in booking.Rooms)
+                            {
+                                Console.WriteLine($"{counter}. {room.RoomNumber}");
+                                counter++;
+                            }
+                            var selection = ValidateSelection(booking.Rooms.Count);
+                            var selectedRoom = booking.Rooms[selection - 1];
+                            if (selectedRoom.Booking != null)
+                            {
+                                selectedRoom.Booking = null;
+                                booking.CheckOutDate = DateTime.Now;
+                                _bookingService.UpdateBooking(booking.BookingId);
+                                Console.WriteLine("Gästen har checkats ut!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Rummet är redan tomt.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Du kan bara checka ut på utcheckningsdagen.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Gästen har inga bokade rum.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Gäst hittades inte.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt ID.");
+            }
         }
 
         public void GuestPaidBooking()

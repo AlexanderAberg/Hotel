@@ -57,7 +57,7 @@ namespace Hotel.Services
 
         internal void RemoveGuests(Guest guest)
         {
-            throw new NotImplementedException();
+
         }
     }
 }

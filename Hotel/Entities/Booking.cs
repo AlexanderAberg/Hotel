@@ -16,5 +16,7 @@ namespace Hotel.Entities
         public List<Room> Rooms { get; set; }
         public List<Guest> Guests { get; set; }
         public bool IsAvailable { get; internal set; }
+        public DateTime CheckInDate { get; internal set; }
+        public DateTime CheckOutDate { get; internal set; }
     }
 }

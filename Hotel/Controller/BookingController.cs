@@ -1,5 +1,6 @@
 ﻿using Hotel.Data;
 using Hotel.Entities;
+using Hotel.Menus;
 using Hotel.Services;
 using System;
 using System.Collections.Generic;
