@@ -17,6 +17,16 @@ namespace Hotel.Controller
             _guestService = guestService;
         }
 
+        public void CheckInGuest()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CheckOutGuest()
+        {
+            throw new NotImplementedException();
+        }
+
         public void RegisterNewGuest()
         {
             Console.WriteLine("Skriv in gästens uppgifter: ");
@@ -186,67 +196,42 @@ namespace Hotel.Controller
             throw new NotImplementedException();
         }
 
-        public void CheckInGuest()
+        public void CreateRoom()
         {
             throw new NotImplementedException();
         }
 
-        public void CheckOutGuest()
+        public void UpdateRoom()
         {
             throw new NotImplementedException();
         }
 
-        internal void GuestMenu()
+        public void DeleteRoom()
         {
             throw new NotImplementedException();
         }
 
-        internal void RoomMenu()
+        public void ListRooms()
         {
             throw new NotImplementedException();
         }
 
-        internal void BookingMenu()
+        public void CreateBooking()
         {
             throw new NotImplementedException();
         }
 
-        internal void CreateRoom()
+        public void UpdateBooking()
         {
             throw new NotImplementedException();
         }
 
-        internal void UpdateRoom()
+        public void DeleteBooking()
         {
             throw new NotImplementedException();
         }
 
-        internal void DeleteRoom()
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void ListRooms()
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void CreateBooking()
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void UpdateBooking()
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void DeleteBooking()
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void ListBookings()
+        public void ListBookings()
         {
             throw new NotImplementedException();
         }

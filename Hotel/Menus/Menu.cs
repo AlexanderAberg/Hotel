@@ -36,15 +36,15 @@ namespace Hotel.Menus
             {
                 case "1":
                     Console.Clear();
-                    guestController.GuestMenu();
+                    GuestMenu();
                     break;
                 case "2":
                     Console.Clear();
-                    guestController.RoomMenu();
+                    RoomMenu();
                     break;
                 case "3":
                     Console.Clear();
-                    guestController.BookingMenu();
+                    BookingMenu();
                     break;
                 case "4":
                     Console.Clear();
