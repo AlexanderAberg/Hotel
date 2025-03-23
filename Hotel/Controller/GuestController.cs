@@ -87,7 +87,7 @@ namespace Hotel.Controller
 
         public void EditGuestInformation()
         {
-            Console.WriteLine("Ange gästens ID för att redigera information:");
+            Console.WriteLine("Ange gästens ID för att redigera gästens information:");
             Console.Write("> ");
             if (int.TryParse(Console.ReadLine(), out int guestId))
             {
@@ -144,7 +144,41 @@ namespace Hotel.Controller
 
         public void RemoveGuest()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Ange gästens ID för att ta bort gästen:");
+            Console.Write("> ");
+            if (int.TryParse(Console.ReadLine(), out int guestId))
+            {
+                var guest = _guestService.GetGuest(guestId);
+                if (guest != null)
+                {
+                    if (guest.Booking != null)
+                    {
+                        Console.WriteLine("Gästen har aktiva bokningar. Vill du ta bort dem också? (ja/nej)");
+                        Console.Write("> ");
+                        var response = Console.ReadLine();
+                        if (response?.ToLower() == "ja")
+                        {
+                            _guestService.RemoveBookings(guest.Booking);
+                            Console.WriteLine("Alla gästens bokningar har tagits bort.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Det finns aktiva bokningar på gästen, därför har gästen inte tagits bort.");
+                            return;
+                        }
+                    }
+                    _guestService.DeleteGuest();
+                    Console.WriteLine("Gästen har tagits bort.");
+                }
+                else
+                {
+                    Console.WriteLine("Gäst hittades inte.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt ID.");
+            }
         }
 
         public void ListGuests()
