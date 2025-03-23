@@ -20,12 +20,57 @@ namespace Hotel.Menus
         public void Start()
         {
 
+            Console.WriteLine("1. Guests");
+            Console.WriteLine("2. Rooms");
+            Console.WriteLine("3. Bookings");
+            Console.WriteLine("4. Check in guest");
+            Console.WriteLine("5. Check out guest");
+            Console.WriteLine("0. Exit");
+            var choice = Console.ReadLine();
+
+            var guestController = new GuestController(new GuestService(_dbContext));
+
+
+            switch (choice)
+            {
+                case "1":
+                    Console.Clear();
+                    guestController.GuestMenu();
+                    break;
+                case "2":
+                    Console.Clear();
+                    guestController.RoomMenu();
+                    break;
+                case "3":
+                    Console.Clear();
+                    guestController.BookingMenu();
+                    break;
+                case "4":
+                    Console.Clear();
+                    guestController.CheckInGuest();
+                    break;
+                case "5":
+                    Console.Clear();
+                    guestController.CheckOutGuest();
+                    break;
+                case "0":
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+
+        public void GuestMenu()
+        {
+            Console.WriteLine("Guest Menu");
+            Console.WriteLine("****************");
             Console.WriteLine("1. Create guest");
             Console.WriteLine("2. Update guest");
             Console.WriteLine("3. Delete guest");
-            Console.WriteLine("4. List guest");
-            Console.WriteLine("5. Check in guest");
-            Console.WriteLine("6. Check out guest");
+            Console.WriteLine("4. List guests");
             Console.WriteLine("0. Exit");
             var choice = Console.ReadLine();
 
@@ -50,21 +95,103 @@ namespace Hotel.Menus
                     Console.Clear();
                     guestController.ListGuests();
                     break;
-                case "5":
-                    Console.Clear();
-                    guestController.CheckInGuest();
+                case "0":
+                    Environment.Exit(0);
                     break;
-                case "6":
+                default:
+                    Console.WriteLine("Invalid choice");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+
+        public void RoomMenu()
+        {
+            Console.WriteLine("Room Menu");
+            Console.WriteLine("****************");
+            Console.WriteLine("1. Create room");
+            Console.WriteLine("2. Update room");
+            Console.WriteLine("3. Delete room");
+            Console.WriteLine("4. List rooms");
+            Console.WriteLine("0. Exit");
+            var choice = Console.ReadLine();
+            var guestController = new GuestController(new GuestService(_dbContext));
+
+
+            switch (choice)
+            {
+                case "1":
                     Console.Clear();
-                    guestController.CheckOutGuest();
+                    guestController.CreateRoom();
+                    break;
+                case "2":
+                    Console.Clear();
+                    guestController.UpdateRoom();
+                    break;
+                case "3":
+                    Console.Clear();
+                    guestController.DeleteRoom();
+                    break;
+                case "4":
+                    Console.Clear();
+                    guestController.ListRooms();
                     break;
                 case "0":
                     Environment.Exit(0);
                     break;
                 default:
                     Console.WriteLine("Invalid choice");
+                    PressAnyKeyToContinue();
                     break;
             }
+        }
+
+        public void BookingMenu()
+        {
+            Console.WriteLine("Booking Menu");
+            Console.WriteLine("****************");
+            Console.WriteLine("1. Create booking");
+            Console.WriteLine("2. Update booking");
+            Console.WriteLine("3. Delete booking");
+            Console.WriteLine("4. List bookings");
+            Console.WriteLine("0. Exit");
+            var choice = Console.ReadLine();
+            var guestController = new GuestController(new GuestService(_dbContext));
+            
+            
+            switch (choice)
+            {
+                case "1":
+                    Console.Clear();
+                    guestController.CreateBooking();
+                    break;
+                case "2":
+                    Console.Clear();
+                    guestController.UpdateBooking();
+                    break;
+                case "3":
+                    Console.Clear();
+                    guestController.DeleteBooking();
+                    break;
+                case "4":
+                    Console.Clear();
+                    guestController.ListBookings();
+                    break;
+                case "0":
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+
+        }
+
+        public void PressAnyKeyToContinue()
+        {
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ReadKey();
         }
     }
 }
