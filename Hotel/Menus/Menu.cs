@@ -12,8 +12,6 @@ namespace Hotel.Menus
     public class Menu
     {
         private ApplicationDbContext _dbContext;
-        private object bookingController;
-
         public Menu(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;

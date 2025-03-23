@@ -54,10 +54,5 @@ namespace Hotel.Services
         {
             return _dbContext.Guests.ToList();
         }
-
-        public void RemoveGuests(Guest guest)
-        {
-
-        }
     }
 }
