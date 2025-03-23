@@ -14,14 +14,13 @@ namespace Hotel.Entities
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int GuestId { get; set; } = GenerateGuestId();
-        public Booking Booking { get; set; }
+        public List <Booking> Bookings { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
         public string City { get; set; }
         [StringLength(15)]
         public string Phone { get; set; } = null!;
-        public object Bookings { get; internal set; }
 
         private static int GenerateGuestId()
         {
