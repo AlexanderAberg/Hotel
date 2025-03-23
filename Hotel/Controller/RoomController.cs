@@ -103,5 +103,6 @@ namespace Hotel.Controller
                     $"{Environment.NewLine}Sängtyp: {room.BedType}" +
                     $"{Environment.NewLine}Extrasängar: {room.ExtraBed}");
             }
+        }
     }
 }

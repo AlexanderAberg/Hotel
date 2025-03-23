@@ -344,7 +344,18 @@ namespace Hotel.Controller
 
         public void ListGuests()
         {
-            throw new NotImplementedException();
+            var guests = _guestService.GetGuests();
+            if (guests.Any())
+            {
+                foreach (var guest in guests)
+                {
+                    Console.WriteLine($"ID: {guest.GuestId}, Name: {guest.FirstName} {guest.LastName}, Email: {guest.Email}, City: {guest.City}, Phone: {guest.Phone}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Inga gäster hittades.");
+            }
         }
     }
 }
