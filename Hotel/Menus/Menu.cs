@@ -12,6 +12,8 @@ namespace Hotel.Menus
     public class Menu
     {
         private ApplicationDbContext _dbContext;
+        private object bookingController;
+
         public Menu(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -31,6 +33,8 @@ namespace Hotel.Menus
             var choice = Console.ReadLine();
 
             var guestController = new GuestController(new GuestService(_dbContext));
+            var roomController = new RoomController(new RoomService(_dbContext));
+            var bookingController = new BookingController(new BookingService(_dbContext));
 
 
             switch (choice)
@@ -121,26 +125,26 @@ namespace Hotel.Menus
             Console.WriteLine("4. List rooms");
             Console.WriteLine("0. Exit");
             var choice = Console.ReadLine();
-            var guestController = new GuestController(new GuestService(_dbContext));
+            var roomController = new RoomController(new RoomService(_dbContext));
 
 
             switch (choice)
             {
                 case "1":
                     Console.Clear();
-                    guestController.CreateRoom();
+                    roomController.CreateRoom();
                     break;
                 case "2":
                     Console.Clear();
-                    guestController.UpdateRoom();
+                    roomController.UpdateRoom();
                     break;
                 case "3":
                     Console.Clear();
-                    guestController.DeleteRoom();
+                    roomController.DeleteRoom();
                     break;
                 case "4":
                     Console.Clear();
-                    guestController.ListRooms();
+                    roomController.ListRooms();
                     break;
                 case "0":
                     Environment.Exit(0);
@@ -162,26 +166,26 @@ namespace Hotel.Menus
             Console.WriteLine("4. List bookings");
             Console.WriteLine("0. Exit");
             var choice = Console.ReadLine();
-            var guestController = new GuestController(new GuestService(_dbContext));
+            var bookingController = new BookingController(new BookingService(_dbContext));
             
             
             switch (choice)
             {
                 case "1":
                     Console.Clear();
-                    guestController.CreateBooking();
+                    bookingController.CreateBooking();
                     break;
                 case "2":
                     Console.Clear();
-                    guestController.UpdateBooking();
+                    bookingController.UpdateBooking();
                     break;
                 case "3":
                     Console.Clear();
-                    guestController.DeleteBooking();
+                    bookingController.DeleteBooking();
                     break;
                 case "4":
                     Console.Clear();
-                    guestController.ListBookings();
+                    bookingController.ListBookings();
                     break;
                 case "0":
                     Environment.Exit(0);

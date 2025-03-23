@@ -8,54 +8,54 @@ using System.Threading.Tasks;
 
 namespace Hotel.Services
 {
-    public class GuestService
+    public class RoomService
     {
         ApplicationDbContext _dbContext;
 
 
-        public GuestService(ApplicationDbContext dbContext)
+        public RoomService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public void CreateGuest(Guest guest)
+        public void CreateRoom(Room room)
         {
 
-            _dbContext.Guests.Add(guest);
+            _dbContext.Rooms.Add(room);
             _dbContext.SaveChanges();
         }
 
 
-        public Guest GetGuest(int guestId)
+        public Room GetRoom(int roomNumber)
         {
             return null;
         }
 
 
-        public List<Guest> GetAllGuests()
+        public List<Room> GetAllRooms()
         {
             return null;
         }
 
 
-        public string UpdateGuest(int guestId)
+        public string UpdateRoom(int roomNumber)
         {
 
             return "Return status message (success or failure)";
         }
 
-        public string RemoveGuest()
+        public string DeleteRoom()
         {
             return "Return status message (success or failure)";
         }
 
 
-        public List<Guest> GetGuests()
+        public List<Room> GetRooms()
         {
-            return _dbContext.Guests.ToList();
+            return _dbContext.Rooms.ToList();
         }
 
-        internal void RemoveGuests(Guest guest)
+        internal void Remove(Booking booking)
         {
             throw new NotImplementedException();
         }

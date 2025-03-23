@@ -11,6 +11,8 @@ namespace Hotel.Controller
     public class GuestController
     {
         private GuestService _guestService;
+        private RoomService _roomService;
+        private BookingService _bookingService;
 
         public GuestController(GuestService guestService)
         {
@@ -52,7 +54,7 @@ namespace Hotel.Controller
             Console.Write(">");
             var phone = Console.ReadLine();
 
-            var availableBookings = _guestService.GetRooms();
+            var availableBookings = _roomService.GetRooms();
 
 
             Console.WriteLine($"{Environment.NewLine}Välj rum:");
@@ -173,7 +175,7 @@ namespace Hotel.Controller
                         var response = Console.ReadLine();
                         if (response?.ToLower() == "ja")
                         {
-                            _guestService.RemoveBookings(guest.Booking);
+                            _bookingService.DeleteBooking(guest.Booking);
                             Console.WriteLine("Alla gästens bokningar har tagits bort.");
                         }
                         else
@@ -182,7 +184,7 @@ namespace Hotel.Controller
                             return;
                         }
                     }
-                    _guestService.DeleteGuest();
+                    _guestService.RemoveGuest();
                     Console.WriteLine("Gästen har tagits bort.");
                 }
                 else
@@ -197,46 +199,6 @@ namespace Hotel.Controller
         }
 
         public void ListGuests()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CreateRoom()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateRoom()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteRoom()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ListRooms()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CreateBooking()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateBooking()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteBooking()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ListBookings()
         {
             throw new NotImplementedException();
         }
