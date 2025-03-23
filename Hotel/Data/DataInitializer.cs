@@ -49,41 +49,44 @@ namespace Hotel.Data
 
         public static void GenerateGuests(ApplicationDbContext dbContext)
         {
-            
             dbContext.Guests.Add(new Guest
             {
+                GuestId = 000001,
                 FirstName = "Kalle",
                 LastName = "Berg",
                 Email = "kalle@hotmail.se",
                 City = "Stockholm",
-                Phone = "07o012334567",
+                Phone = "070-12344711",
             });
 
             dbContext.Guests.Add(new Guest
             {
+                GuestId = 000002,
                 FirstName = "Anna",
                 LastName = "Andersson",
                 Email = "anna@hotmail.com",
                 City = "Stockholm",
-                Phone = "07o4122339567",
+                Phone = "070-4123957",
             });
 
             dbContext.Guests.Add(new Guest
             {
+                GuestId = 000003,
                 FirstName = "Joel",
                 LastName = "Abraha",
                 Email = "joel@hotmail.com",
                 City = "Sundbyberg",
-                Phone = "07o4122332567",
+                Phone = "070-1233267",
             });
 
             dbContext.Guests.Add(new Guest
             {
+                GuestId = 000004,
                 FirstName = "Max",
                 LastName = "Häll",
                 Email = "max@hotmail.com",
                 City = "Sundbyberg",
-                Phone = "07o4122332647",
+                Phone = "070-1232647",
             });
 
             dbContext.SaveChanges();
@@ -97,23 +100,47 @@ namespace Hotel.Data
             {
                 RoomNumber = 11,
                 RoomSize = 10,
-                BedType = "Enkelsäng",
+                Bed = Room.BedType.Enkelsäng,
                 ExtraBed = 0,
             });
 
             dbContext.Rooms.Add(new Room
             {
-                RoomNumber = 22,
-                RoomSize = 19,
-                BedType = "Dubbelsäng",
+                RoomNumber = 12,
+                RoomSize = 12,
+                Bed = Room.BedType.Enkelsäng,
+                ExtraBed = 1,
+            });
+
+            dbContext.Rooms.Add(new Room
+            {
+                RoomNumber = 13,
+                RoomSize = 18,
+                Bed = Room.BedType.Enkelsäng,
+                ExtraBed = 2,
+            });
+
+            dbContext.Rooms.Add(new Room
+            {
+                RoomNumber = 14,
+                RoomSize = 17,
+                Bed = Room.BedType.Dubbelsäng,
                 ExtraBed = 0,
             });
 
             dbContext.Rooms.Add(new Room
             {
-                RoomNumber = 33,
-                RoomSize = 25,
-                BedType = "Dubbelsäng",
+                RoomNumber = 15,
+                RoomSize = 9,
+                Bed = Room.BedType.Enkelsäng,
+                ExtraBed = 0,
+            });
+
+            dbContext.Rooms.Add(new Room
+            {
+                RoomNumber = 21,
+                RoomSize = 21,
+                Bed = Room.BedType.Dubbelsäng,
                 ExtraBed = 2,
             });
 
@@ -121,8 +148,80 @@ namespace Hotel.Data
             {
                 RoomNumber = 22,
                 RoomSize = 19,
-                BedType = "Dubbelsäng",
+                Bed = Room.BedType.Dubbelsäng,
+                ExtraBed = 0,
+            });
+
+            dbContext.Rooms.Add(new Room
+            {
+                RoomNumber = 23,
+                RoomSize = 15,
+                Bed = Room.BedType.Dubbelsäng,
+                ExtraBed = 0,
+            });
+
+            dbContext.Rooms.Add(new Room
+            {
+                RoomNumber = 24,
+                RoomSize = 25,
+                Bed = Room.BedType.Dubbelsäng,
+                ExtraBed = 2,
+            });
+
+            dbContext.Rooms.Add(new Room
+            {
+                RoomNumber = 25,
+                RoomSize = 21,
+                Bed = Room.BedType.Dubbelsäng,
                 ExtraBed = 1,
+            });
+
+            dbContext.Rooms.Add(new Room
+            {
+                RoomNumber = 31,
+                RoomSize = 19,
+                Bed = Room.BedType.Dubbelsäng,
+                ExtraBed = 1,
+            });
+
+            dbContext.Rooms.Add(new Room
+            {
+                RoomNumber = 32,
+                RoomSize = 17,
+                Bed = Room.BedType.Dubbelsäng,
+                ExtraBed = 0,
+            });
+
+            dbContext.Rooms.Add(new Room
+            {
+                RoomNumber = 33,
+                RoomSize = 25,
+                Bed = Room.BedType.Dubbelsäng,
+                ExtraBed = 2,
+            });
+
+            dbContext.Rooms.Add(new Room
+            {
+                RoomNumber = 34,
+                RoomSize = 21,
+                Bed = Room.BedType.Dubbelsäng,
+                ExtraBed = 1,
+            });
+
+            dbContext.Rooms.Add(new Room
+            {
+                RoomNumber = 35,
+                RoomSize = 10,
+                Bed = Room.BedType.Enkelsäng,
+                ExtraBed = 0,
+            });
+
+            dbContext.Rooms.Add(new Room
+            {
+                RoomNumber = 41,
+                RoomSize = 74,
+                Bed = Room.BedType.Dubbelsäng,
+                ExtraBed = 2,
             });
 
             dbContext.SaveChanges();

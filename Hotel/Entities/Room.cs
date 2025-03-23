@@ -13,7 +13,11 @@ namespace Hotel.Entities
         public int RoomNumber { get; set; } 
         public Booking Booking { get; set; } 
         public int RoomSize { get; set; } 
-        public string BedType { get; set; } 
-        public int ExtraBed { get; set; } 
+        public enum BedType
+        {   Enkelsäng, 
+            Dubbelsäng,
+        }
+        public BedType Bed { get; set; }
+        public int ExtraBed { get; set; }
     }
 }

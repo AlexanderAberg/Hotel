@@ -17,6 +17,6 @@ namespace Hotel.Entities
         public string City { get; set; }
         [StringLength(15)]
         public string Phone { get; set; } = null!;
-
+        public object Bookings { get; internal set; }
     }
 }

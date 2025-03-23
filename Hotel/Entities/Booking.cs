@@ -16,5 +16,6 @@ namespace Hotel.Entities
         public List<Room> Rooms { get; set; }
         public List<Guest> Guests { get; set; }
         public bool IsAvailable { get; internal set; }
+        public object Room { get; internal set; }
     }
 }

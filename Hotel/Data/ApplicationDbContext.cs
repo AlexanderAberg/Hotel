@@ -38,5 +38,11 @@ namespace Hotel.Data
             }
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Room>()
+                .Property(e => e.Bed)
+                .HasConversion<string>();  // Konverterar automatiskt mellan enum och sträng
+        }
     }
 }
