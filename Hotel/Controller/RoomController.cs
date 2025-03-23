@@ -20,22 +20,88 @@ namespace Hotel.Controller
         }
         public void CreateRoom()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Skriv in rumsinformation: ");
+
+            Console.WriteLine($"{Environment.NewLine}Rumsnummer:");
+            Console.Write(">");
+            var roomNumber = int.Parse(Console.ReadLine());
+
+            var existingRoom = _roomService.GetRoom(roomNumber);
+            if (existingRoom != null)
+            {
+                Console.WriteLine("Rummet finns redan.");
+                return;
+            }
+
+            Console.WriteLine($"{Environment.NewLine}Storlek på rummet:");
+            Console.Write(">");
+            var roomSize = int.Parse(Console.ReadLine());
+            Console.WriteLine($"{Environment.NewLine}Sängtyp:");
+            Console.Write(">");
+            var bedType = Console.ReadLine();
+            Console.WriteLine($"{Environment.NewLine}Hur många extrasängar får plats:");
+            Console.Write(">");
+            var extraBed = int.Parse(Console.ReadLine());
+
+            var newRoom = new Room
+            {
+                RoomNumber = roomNumber,
+                RoomSize = roomSize,
+                BedType = bedType,
+                ExtraBed = extraBed,
+            };
+
+            _roomService.CreateRoom(newRoom);
+
+            Console.WriteLine("Rummet är tillagt");
         }
 
         public void UpdateRoom()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(
+                "Vilket rum vill du uppdatera? Ange rumsnummer:");
+            Console.Write(">");
+            var roomNumber = int.Parse(Console.ReadLine());
+
+            var existingRoom = _roomService.GetRoom(roomNumber);
+            if (existingRoom == null)
+            {
+                Console.WriteLine("Rummet finns inte.");
+                return;
+            }
+            Console.WriteLine(
+                "Vilken information vill du uppdatera? Ange siffra:" +
+                $"{Environment.NewLine}1. Storlek på rummet" +
+                $"{Environment.NewLine}2. Sängtyp" +
+                $"{Environment.NewLine}3. Antal extrasängar");
         }
 
         public void DeleteRoom()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(
+                "Vilket rum vill du ta bort? Ange rumsnummer:");
+            Console.Write(">");
+            var roomNumber = int.Parse(Console.ReadLine());
+            var existingRoom = _roomService.GetRoom(roomNumber);
+            if (existingRoom == null)
+            {
+                Console.WriteLine("Rummet finns inte.");
+                return;
+            }
+            _roomService.RemoveRoom(existingRoom);
+            Console.WriteLine("Rummet är borttaget.");
         }
 
         public void ListRooms()
         {
-            throw new NotImplementedException();
-        }
+            var rooms = _roomService.GetRooms();
+            foreach (var room in rooms)
+            {
+                Console.WriteLine(
+                    $"Rumsnummer: {room.RoomNumber}" +
+                    $"{Environment.NewLine}Storlek: {room.RoomSize}" +
+                    $"{Environment.NewLine}Sängtyp: {room.BedType}" +
+                    $"{Environment.NewLine}Extrasängar: {room.ExtraBed}");
+            }
     }
 }
