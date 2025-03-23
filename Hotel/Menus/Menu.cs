@@ -19,7 +19,8 @@ namespace Hotel.Menus
 
         public void Start()
         {
-
+            Console.WriteLine("Main Menu");
+            Console.WriteLine("****************");
             Console.WriteLine("1. Guests");
             Console.WriteLine("2. Rooms");
             Console.WriteLine("3. Bookings");
