@@ -49,6 +49,11 @@ namespace Hotel.Services
             return "Return status message (success or failure)";
         }
 
+        public string PayBooking()
+        {
+            return "Return status message (success or failure)";
+        }
+
 
         public List<Booking> GetBookings()
         {

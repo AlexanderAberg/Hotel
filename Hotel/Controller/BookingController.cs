@@ -37,5 +37,10 @@ namespace Hotel.Controller
         {
             throw new NotImplementedException();
         }
+
+        public void PayBooking()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

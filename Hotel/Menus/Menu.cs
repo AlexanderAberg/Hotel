@@ -164,6 +164,7 @@ namespace Hotel.Menus
             Console.WriteLine("2. Update booking");
             Console.WriteLine("3. Delete booking");
             Console.WriteLine("4. List bookings");
+            Console.WriteLine("5. Pay booking");
             Console.WriteLine("0. Exit");
             var choice = Console.ReadLine();
             var bookingController = new BookingController(new BookingService(_dbContext));
@@ -186,6 +187,10 @@ namespace Hotel.Menus
                 case "4":
                     Console.Clear();
                     bookingController.ListBookings();
+                    break;
+                case "5":
+                    Console.Clear();
+                    bookingController.PayBooking();
                     break;
                 case "0":
                     Environment.Exit(0);

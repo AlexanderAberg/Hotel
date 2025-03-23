@@ -31,7 +31,7 @@ namespace Hotel.Controller
                     var booking = guest.Booking;
                     if (booking != null && booking.Rooms.Any())
                     {
-                        if (booking.CheckInDate.Date == DateTime.Now.Date)
+                        if (booking.CheckIn.Date == DateTime.Now.Date)
                         {
                             Console.WriteLine($"{Environment.NewLine}Välj rum att checka in i:");
                             var counter = 1;
@@ -45,7 +45,7 @@ namespace Hotel.Controller
                             if (selectedRoom.Booking == null)
                             {
                                 selectedRoom.Booking = booking;
-                                booking.CheckInDate = DateTime.Now;
+                                booking.CheckIn = DateTime.Now;
                                 _bookingService.UpdateBooking(booking.BookingId);
                                 Console.WriteLine("Gästen har checkats in!");
                             }
@@ -87,7 +87,7 @@ namespace Hotel.Controller
                     var booking = guest.Booking;
                     if (booking != null && booking.Rooms.Any())
                     {
-                        if (booking.CheckInDate.Date == DateTime.Now.Date)
+                        if (booking.CheckIn.Date == DateTime.Now.Date)
                         {
                             Console.WriteLine($"{Environment.NewLine}Välj rum att checka ut från:");
                             var counter = 1;
@@ -101,7 +101,7 @@ namespace Hotel.Controller
                             if (selectedRoom.Booking != null)
                             {
                                 selectedRoom.Booking = null;
-                                booking.CheckOutDate = DateTime.Now;
+                                booking.CheckOut = DateTime.Now;
                                 _bookingService.UpdateBooking(booking.BookingId);
                                 Console.WriteLine("Gästen har checkats ut!");
                             }
@@ -133,7 +133,49 @@ namespace Hotel.Controller
 
         public void GuestPaidBooking()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Ange gästens ID för att markera att gästen har betalat för bokningen:");
+            Console.Write("> ");
+            if (int.TryParse(Console.ReadLine(), out int guestId))
+            {
+                var guest = _guestService.GetGuest(guestId);
+                if (guest != null)
+                {
+                    var booking = guest.Booking;
+                    if (booking != null)
+                    {
+                        var daysUntilCheckIn = (booking.CheckIn - DateTime.Now).TotalDays;
+                        if (daysUntilCheckIn <= 10)
+                        {
+                            booking.IsPaid = true;
+                            _bookingService.UpdateBooking(booking.BookingId);
+                            Console.WriteLine("Bokningen har markerats som betald!");
+                        }
+                        else if (daysUntilCheckIn > 10 && (DateTime.Now - booking.CheckIn).TotalDays <= 10)
+                        {
+                            booking.IsPaid = true;
+                            _bookingService.UpdateBooking(booking.BookingId);
+                            Console.WriteLine("Bokningen har markerats som betald!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Bokningen har avbrutits eftersom betalningen inte gjordes inom 10 dagar.");
+                            _bookingService.DeleteBooking(booking);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Gästen har ingen bokning.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Gäst hittades inte.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt ID.");
+            }
         }
 
         public void RegisterNewGuest()
