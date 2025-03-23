@@ -54,5 +54,10 @@ namespace Hotel.Services
         {
             return _dbContext.Rooms.ToList();
         }
+
+        internal void RemoveBookings(Booking booking)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

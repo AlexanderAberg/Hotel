@@ -195,5 +195,60 @@ namespace Hotel.Controller
         {
             throw new NotImplementedException();
         }
+
+        internal void GuestMenu()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void RoomMenu()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void BookingMenu()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void CreateRoom()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void UpdateRoom()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void DeleteRoom()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void ListRooms()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void CreateBooking()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void UpdateBooking()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void DeleteBooking()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void ListBookings()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
