@@ -21,15 +21,15 @@ namespace Hotel.Menus
 
         public void Start()
         {
-            Console.WriteLine("Main Menu");
+            Console.WriteLine("Huvudmenyn");
             Console.WriteLine("****************");
-            Console.WriteLine("1. Guests");
-            Console.WriteLine("2. Rooms");
-            Console.WriteLine("3. Bookings");
-            Console.WriteLine("4. Check in guest");
-            Console.WriteLine("5. Check out guest");
-            Console.WriteLine("6. Guest paid for booking");
-            Console.WriteLine("0. Exit");
+            Console.WriteLine("1. Gäster");
+            Console.WriteLine("2. Rum");
+            Console.WriteLine("3. Bokning");
+            Console.WriteLine("4. Checka in gäst");
+            Console.WriteLine("5. Checka ut gäst");
+            Console.WriteLine("6. Gästbetalning för bokning");
+            Console.WriteLine("0. Avsluta");
             var choice = Console.ReadLine();
 
             var guestController = new GuestController(new GuestService(_dbContext));
@@ -67,7 +67,7 @@ namespace Hotel.Menus
                     Environment.Exit(0);
                     break;
                 default:
-                    Console.WriteLine("Invalid choice");
+                    Console.WriteLine("Ogiltigt val");
                     PressAnyKeyToContinue();
                     break;
             }
@@ -75,12 +75,12 @@ namespace Hotel.Menus
 
         public void GuestMenu()
         {
-            Console.WriteLine("Guest Menu");
+            Console.WriteLine("Gästmenyn");
             Console.WriteLine("****************");
-            Console.WriteLine("1. Create guest");
-            Console.WriteLine("2. Update guest");
-            Console.WriteLine("3. Delete guest");
-            Console.WriteLine("4. List guests");
+            Console.WriteLine("1. Skapa gäst");
+            Console.WriteLine("2. Uppdatera gäst");
+            Console.WriteLine("3. Ta bort gäst");
+            Console.WriteLine("4. Gästlista");
             Console.WriteLine("0. Exit");
             var choice = Console.ReadLine();
 
@@ -109,7 +109,7 @@ namespace Hotel.Menus
                     Environment.Exit(0);
                     break;
                 default:
-                    Console.WriteLine("Invalid choice");
+                    Console.WriteLine("Ogiltigt val");
                     PressAnyKeyToContinue();
                     break;
             }
@@ -117,13 +117,13 @@ namespace Hotel.Menus
 
         public void RoomMenu()
         {
-            Console.WriteLine("Room Menu");
+            Console.WriteLine("Rumsmenyn");
             Console.WriteLine("****************");
-            Console.WriteLine("1. Create room");
-            Console.WriteLine("2. Update room");
-            Console.WriteLine("3. Delete room");
-            Console.WriteLine("4. List rooms");
-            Console.WriteLine("0. Exit");
+            Console.WriteLine("1. Skapa rum");
+            Console.WriteLine("2. Uppdatera rum");
+            Console.WriteLine("3. Ta bort rum");
+            Console.WriteLine("4. Rumslista");
+            Console.WriteLine("0. Avsluta");
             var choice = Console.ReadLine();
             var roomController = new RoomController(new RoomService(_dbContext));
 
@@ -150,7 +150,7 @@ namespace Hotel.Menus
                     Environment.Exit(0);
                     break;
                 default:
-                    Console.WriteLine("Invalid choice");
+                    Console.WriteLine("Ogiltigt val");
                     PressAnyKeyToContinue();
                     break;
             }
@@ -158,13 +158,13 @@ namespace Hotel.Menus
 
         public void BookingMenu()
         {
-            Console.WriteLine("Booking Menu");
+            Console.WriteLine("Bokningsmeny");
             Console.WriteLine("****************");
-            Console.WriteLine("1. Create booking");
-            Console.WriteLine("2. Update booking");
-            Console.WriteLine("3. Delete booking");
-            Console.WriteLine("4. List bookings");
-            Console.WriteLine("5. Pay booking");
+            Console.WriteLine("1. Skapa bokning");
+            Console.WriteLine("2. Uppdatera bokning");
+            Console.WriteLine("3. Ta bort bokning");
+            Console.WriteLine("4. Bokningslista");
+            Console.WriteLine("5. Betala bokning");
             Console.WriteLine("0. Exit");
             var choice = Console.ReadLine();
             var bookingController = new BookingController(new BookingService(_dbContext));
@@ -196,7 +196,7 @@ namespace Hotel.Menus
                     Environment.Exit(0);
                     break;
                 default:
-                    Console.WriteLine("Invalid choice");
+                    Console.WriteLine("Ogiltigt val");
                     PressAnyKeyToContinue();
                     break;
             }
@@ -205,7 +205,7 @@ namespace Hotel.Menus
 
         public void PressAnyKeyToContinue()
         {
-            Console.WriteLine("\nPress any key to continue...");
+            Console.WriteLine("\nTryck på valfri tangent för att fortsätta...");
             Console.ReadKey();
         }
     }

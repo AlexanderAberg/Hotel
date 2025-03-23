@@ -30,18 +30,18 @@ namespace Hotel.Controller
 
         public void CreateBooking()
         {
-            Console.WriteLine("Enter Booking Details");
-            Console.WriteLine("Enter Room Number");
+            Console.WriteLine("Skriv in bokningsdetaljer");
+            Console.WriteLine("Skriv in rumsnummer");
             int roomNumber = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Enter Check In Date");
+            Console.WriteLine("Skriv in incheckningsdatumet");
             DateTime checkInDate = Convert.ToDateTime(Console.ReadLine());
-            Console.WriteLine("Enter Check Out Date");
+            Console.WriteLine("Skriv in utcheckningdatumet");
             DateTime checkOutDate = Convert.ToDateTime(Console.ReadLine());
-            Console.WriteLine("Enter Number of Guests");
+            Console.WriteLine("Skriv antalet gäster");
             int numberOfGuests = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Enter Payment Status (true/false)");
+            Console.WriteLine("Skriv in betalningsstatus (true/false)");
             bool isPaid = Convert.ToBoolean(Console.ReadLine());
-            Console.WriteLine("Enter Guest Id");
+            Console.WriteLine("Skriv in gästId");
             int guestId = Convert.ToInt32(Console.ReadLine());
 
             Room room = _roomService.GetRoom(roomNumber);
@@ -49,13 +49,13 @@ namespace Hotel.Controller
 
             if (room == null)
             {
-                Console.WriteLine("Room not found.");
+                Console.WriteLine("Rum finns inte.");
                 return;
             }
 
             if (guest == null)
             {
-                Console.WriteLine("Guest not found.");
+                Console.WriteLine("Kan inte hitta gäst.");
                 return;
             }
 
@@ -70,7 +70,7 @@ namespace Hotel.Controller
             };
 
             _bookingService.CreateBooking(booking);
-            Console.WriteLine("Booking created and will now have Booking Id: " + booking.BookingId);
+            Console.WriteLine("Bokningen har skapats och kommer ha detta bokningsId: " + booking.BookingId);
         }
 
         public void UpdateBooking()
@@ -93,12 +93,12 @@ namespace Hotel.Controller
             Guest guest = _guestService.GetGuest(guestId);
             if (room == null)
             {
-                Console.WriteLine("Room not found.");
+                Console.WriteLine("Rummet existerar inte");
                 return;
             }
             if (guest == null)
             {
-                Console.WriteLine("Guest not found.");
+                Console.WriteLine("Kan inte hitta gäst.");
                 return;
             }
             Booking booking = new Booking()
@@ -112,29 +112,48 @@ namespace Hotel.Controller
                 Guests = new List<Guest> { guest }
             };
             _bookingService.UpdateBooking(bookingId, booking);
-            Console.WriteLine("Booking updated successfully.");
+            Console.WriteLine("Bokningen har uppdaterats.");
         }
 
         public void DeleteBooking()
         {
-            Console.WriteLine("Enter Booking Id");
+            Console.WriteLine("Skriv in bokningsId");
             int bookingId = Convert.ToInt32(Console.ReadLine());
             Booking booking = _bookingService.GetBooking(bookingId);
             if (booking == null)
             {
-                Console.WriteLine("Booking not found.");
+                Console.WriteLine("Bokningen kan inte hittas.");
                 return;
             }
             _bookingService.DeleteBooking(booking);
-            Console.WriteLine("Booking deleted successfully.");
+            Console.WriteLine("Bokningen har tagit bort.");
         }
 
         public void ListBookings()
         {
+            if (_bookingService == null)
+            {
+                Console.WriteLine("Kan inte hitta några bokningar");
+                return;
+            }
+
+            var bookings = _bookingService.GetBookings();
+            if (bookings == null)
+            {
+                Console.WriteLine("Inga bokningar kan hittas");
+                return;
+            }
+
             Console.WriteLine(
                 "Booking Id\tRoom Number\tCheck In\tCheck Out\tNumber of Guests\tIs Paid\tGuest Id");
-            foreach (Booking booking in _bookingService.GetBookings())
+            foreach (Booking booking in bookings)
             {
+                if (booking.Rooms == null || booking.Rooms.Count == 0 || booking.Guests == null || booking.Guests.Count == 0)
+                {
+                    Console.WriteLine($"Bokningen {booking.BookingId} har ej all data.");
+                    continue;
+                }
+
                 Console.WriteLine(
                     booking.BookingId + "\t" +
                     booking.Rooms[0].RoomNumber + "\t" +
@@ -148,16 +167,16 @@ namespace Hotel.Controller
 
         public void PayBooking()
         {
-            Console.WriteLine("Enter Booking Id");
+            Console.WriteLine("Skriv in bokningsId");
             int bookingId = Convert.ToInt32(Console.ReadLine());
             Booking booking = _bookingService.GetBooking(bookingId);
             if (booking == null)
             {
-                Console.WriteLine("Booking not found.");
+                Console.WriteLine("Kan inte hitta bokningen");
                 return;
             }
             _bookingService.PayBooking(booking);
-            Console.WriteLine("Booking paid successfully.");
+            Console.WriteLine("Bokningens betalning har gått igenom.");
         }
     }
 }

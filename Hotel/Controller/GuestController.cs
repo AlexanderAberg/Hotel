@@ -46,7 +46,7 @@ namespace Hotel.Controller
                             {
                                 selectedRoom.Booking = booking;
                                 booking.CheckIn = DateTime.Now;
-                                _bookingService.UpdateBooking(booking.BookingId);
+                                _bookingService.UpdateBooking(booking.BookingId, booking);
                                 Console.WriteLine("Gästen har checkats in!");
                             }
                             else
@@ -102,7 +102,7 @@ namespace Hotel.Controller
                             {
                                 selectedRoom.Booking = null;
                                 booking.CheckOut = DateTime.Now;
-                                _bookingService.UpdateBooking(booking.BookingId);
+                                _bookingService.UpdateBooking(booking.BookingId, booking);
                                 Console.WriteLine("Gästen har checkats ut!");
                             }
                             else
@@ -147,13 +147,13 @@ namespace Hotel.Controller
                         if (daysUntilCheckIn <= 10)
                         {
                             booking.IsPaid = true;
-                            _bookingService.UpdateBooking(booking.BookingId);
+                            _bookingService.UpdateBooking(booking.BookingId, booking);
                             Console.WriteLine("Bokningen har markerats som betald!");
                         }
                         else if (daysUntilCheckIn > 10 && (DateTime.Now - booking.CheckIn).TotalDays <= 10)
                         {
                             booking.IsPaid = true;
-                            _bookingService.UpdateBooking(booking.BookingId);
+                            _bookingService.UpdateBooking(booking.BookingId, booking);
                             Console.WriteLine("Bokningen har markerats som betald!");
                         }
                         else
