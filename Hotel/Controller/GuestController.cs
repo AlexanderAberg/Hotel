@@ -27,6 +27,11 @@ namespace Hotel.Controller
             throw new NotImplementedException();
         }
 
+        public void GuestPaidBooking()
+        {
+            throw new NotImplementedException();
+        }
+
         public void RegisterNewGuest()
         {
             Console.WriteLine("Skriv in gästens uppgifter: ");

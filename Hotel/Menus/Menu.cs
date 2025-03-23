@@ -26,6 +26,7 @@ namespace Hotel.Menus
             Console.WriteLine("3. Bookings");
             Console.WriteLine("4. Check in guest");
             Console.WriteLine("5. Check out guest");
+            Console.WriteLine("6. Guest paid for booking");
             Console.WriteLine("0. Exit");
             var choice = Console.ReadLine();
 
@@ -53,6 +54,10 @@ namespace Hotel.Menus
                 case "5":
                     Console.Clear();
                     guestController.CheckOutGuest();
+                    break;
+                case "6":
+                    Console.Clear();
+                    guestController.GuestPaidBooking();
                     break;
                 case "0":
                     Environment.Exit(0);
