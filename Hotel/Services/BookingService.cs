@@ -26,7 +26,7 @@ namespace Hotel.Services
         }
 
 
-        public Guest GetBooking(int bookingId)
+        public Booking GetBooking(int bookingId)
         {
             return null;
         }
@@ -38,9 +38,8 @@ namespace Hotel.Services
         }
 
 
-        public string UpdateBooking(int bookingId)
+        public string UpdateBooking(int bookingId, Booking booking)
         {
-
             return "Return status message (success or failure)";
         }
 
@@ -49,7 +48,7 @@ namespace Hotel.Services
             return "Return status message (success or failure)";
         }
 
-        public string PayBooking()
+        public string PayBooking(Booking booking)
         {
             return "Return status message (success or failure)";
         }
@@ -64,5 +63,6 @@ namespace Hotel.Services
         {
             throw new NotImplementedException();
         }
+
     }
 }
