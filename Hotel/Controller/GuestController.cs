@@ -30,7 +30,7 @@ namespace Hotel.Controller
             Console.Write(">");
             Console.WriteLine($"{Environment.NewLine}Email:");
             var email = Console.ReadLine();
-            Console.WriteLine($"{Environment.NewLine}Stad:");
+            Console.WriteLine($"{Environment.NewLine}Ort:");
             Console.Write(">");
             var city = Console.ReadLine();
             Console.WriteLine($"{Environment.NewLine}Telefon:");
@@ -87,7 +87,59 @@ namespace Hotel.Controller
 
         public void EditGuestInformation()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Ange gästens ID för att redigera information:");
+            Console.Write("> ");
+            if (int.TryParse(Console.ReadLine(), out int guestId))
+            {
+                var guest = _guestService.GetGuest(guestId);
+                if (guest != null)
+                {
+                    Console.WriteLine($"{Environment.NewLine}Nuvarande information:");
+                    Console.WriteLine($"Förnamn: {guest.FirstName}");
+                    Console.WriteLine($"Efternamn: {guest.LastName}");
+                    Console.WriteLine($"Email: {guest.Email}");
+                    Console.WriteLine($"Ort: {guest.City}");
+                    Console.WriteLine($"Telefon: {guest.Phone}");
+
+                    Console.WriteLine($"{Environment.NewLine}Ange ny information (lämna tomt för att behålla nuvarande information):");
+
+                    Console.WriteLine($"{Environment.NewLine}Förnamn:");
+                    Console.Write("> ");
+                    var firstName = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(firstName)) guest.FirstName = firstName;
+
+                    Console.WriteLine($"{Environment.NewLine}Efternamn:");
+                    Console.Write("> ");
+                    var lastName = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(lastName)) guest.LastName = lastName;
+
+                    Console.WriteLine($"{Environment.NewLine}Email:");
+                    Console.Write("> ");
+                    var email = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(email)) guest.Email = email;
+
+                    Console.WriteLine($"{Environment.NewLine}Stad:");
+                    Console.Write("> ");
+                    var city = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(city)) guest.City = city;
+
+                    Console.WriteLine($"{Environment.NewLine}Telefon:");
+                    Console.Write("> ");
+                    var phone = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(phone)) guest.Phone = phone;
+
+                    _guestService.UpdateGuest(guestId);
+                    Console.WriteLine("Gästinformation har uppdaterats!");
+                }
+                else
+                {
+                    Console.WriteLine("Gäst hittades inte.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt ID.");
+            }
         }
 
         public void RemoveGuest()
