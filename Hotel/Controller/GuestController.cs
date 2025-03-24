@@ -28,23 +28,15 @@ namespace Hotel.Controller
                 var guest = _guestService.GetGuest(guestId);
                 if (guest != null)
                 {
-                    var booking = guest.Booking;
-                    if (booking != null && booking.Rooms.Any())
+                    var booking = guest.Bookings.FirstOrDefault();
+                    if (booking != null && booking.Room != null)
                     {
                         if (booking.CheckIn.Date == DateTime.Now.Date)
                         {
-                            Console.WriteLine($"{Environment.NewLine}Välj rum att checka in i:");
-                            var counter = 1;
-                            foreach (var room in booking.Rooms)
+                            var room = booking.Room;
+                            if (room.Bookings.All(b => b.CheckOut <= DateTime.Now))
                             {
-                                Console.WriteLine($"{counter}. {room.RoomNumber}");
-                                counter++;
-                            }
-                            var selection = ValidateSelection(booking.Rooms.Count);
-                            var selectedRoom = booking.Rooms[selection - 1];
-                            if (selectedRoom.Booking == null)
-                            {
-                                selectedRoom.Booking = booking;
+                                room.Bookings.Add(booking);
                                 booking.CheckIn = DateTime.Now;
                                 _bookingService.UpdateBooking(booking.BookingId, booking);
                                 Console.WriteLine("Gästen har checkats in!");
@@ -84,23 +76,15 @@ namespace Hotel.Controller
                 var guest = _guestService.GetGuest(guestId);
                 if (guest != null)
                 {
-                    var booking = guest.Booking;
-                    if (booking != null && booking.Rooms.Any())
+                    var booking = guest.Bookings.FirstOrDefault();
+                    if (booking != null && booking.Room != null)
                     {
                         if (booking.CheckOut.Date == DateTime.Now.Date)
                         {
-                            Console.WriteLine($"{Environment.NewLine}Välj rum att checka ut från:");
-                            var counter = 1;
-                            foreach (var room in booking.Rooms)
+                            var room = booking.Room;
+                            if (room.Bookings.Contains(booking))
                             {
-                                Console.WriteLine($"{counter}. {room.RoomNumber}");
-                                counter++;
-                            }
-                            var selection = ValidateSelection(booking.Rooms.Count);
-                            var selectedRoom = booking.Rooms[selection - 1];
-                            if (selectedRoom.Booking != null)
-                            {
-                                selectedRoom.Booking = null;
+                                room.Bookings.Remove(booking);
                                 booking.CheckOut = DateTime.Now;
                                 _bookingService.UpdateBooking(booking.BookingId, booking);
                                 Console.WriteLine("Gästen har checkats ut!");
@@ -140,7 +124,7 @@ namespace Hotel.Controller
                 var guest = _guestService.GetGuest(guestId);
                 if (guest != null)
                 {
-                    var booking = guest.Booking;
+                    var booking = guest.Bookings.FirstOrDefault();
                     if (booking != null)
                     {
                         var daysUntilCheckIn = (booking.CheckIn - DateTime.Now).TotalDays;
@@ -206,7 +190,7 @@ namespace Hotel.Controller
             var counter = 1;
             foreach (var booking in availableBookings)
             {
-                Console.WriteLine($"{counter}. {booking.Booking}");
+                Console.WriteLine($"{counter}. Room Number: {booking.RoomNumber}, Room Size: {booking.RoomSize}, Bed Type: {booking.Bed}");
                 counter++;
             }
 
@@ -312,14 +296,17 @@ namespace Hotel.Controller
                 var guest = _guestService.GetGuest(guestId);
                 if (guest != null)
                 {
-                    if (guest.Booking != null)
+                    if (guest.Bookings.Any())
                     {
                         Console.WriteLine("Gästen har aktiva bokningar. Vill du ta bort dem också? (ja/nej)");
                         Console.Write("> ");
                         var response = Console.ReadLine();
                         if (response?.ToLower() == "ja")
                         {
-                            _bookingService.DeleteBooking(guest.Booking);
+                            foreach (var booking in guest.Bookings)
+                            {
+                                _bookingService.DeleteBooking(booking);
+                            }
                             Console.WriteLine("Alla gästens bokningar har tagits bort.");
                         }
                         else
