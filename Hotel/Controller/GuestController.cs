@@ -87,7 +87,7 @@ namespace Hotel.Controller
                     var booking = guest.Booking;
                     if (booking != null && booking.Rooms.Any())
                     {
-                        if (booking.CheckIn.Date == DateTime.Now.Date)
+                        if (booking.CheckOut.Date == DateTime.Now.Date)
                         {
                             Console.WriteLine($"{Environment.NewLine}Välj rum att checka ut från:");
                             var counter = 1;

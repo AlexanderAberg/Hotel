@@ -137,7 +137,7 @@ namespace Hotel.Controller
             }
 
             var bookings = _bookingService.GetBookings();
-            if (bookings == null)
+            if (bookings == null || bookings.Count == 0)
             {
                 Console.WriteLine("Inga bokningar kan hittas");
                 return;
@@ -147,7 +147,7 @@ namespace Hotel.Controller
                 "Booking Id\tRoom Number\tCheck In\tCheck Out\tNumber of Guests\tIs Paid\tGuest Id");
             foreach (Booking booking in bookings)
             {
-                if (booking.Rooms == null || booking.Rooms.Count == 0 || booking.Guests == null || booking.Guests.Count == 0)
+                if (booking.Room == null || booking.Guest == null)
                 {
                     Console.WriteLine($"Bokningen {booking.BookingId} har ej all data.");
                     continue;
@@ -155,12 +155,12 @@ namespace Hotel.Controller
 
                 Console.WriteLine(
                     booking.BookingId + "\t" +
-                    booking.Rooms[0].RoomNumber + "\t" +
+                    booking.Room.RoomNumber + "\t" +
                     booking.CheckIn + "\t" +
                     booking.CheckOut + "\t" +
                     booking.NumberOfGuests + "\t" +
                     booking.IsPaid + "\t" +
-                    booking.Guests[0].GuestId);
+                    booking.Guest.GuestId);
             }
         }
 
