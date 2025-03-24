@@ -44,7 +44,7 @@ namespace Hotel.Services
             return "Return status message (success or failure)";
         }
 
-        public string DeleteRoom()
+        public string DeleteRoom(Room existingRoom)
         {
             return "Return status message (success or failure)";
         }

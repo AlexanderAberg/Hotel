@@ -47,7 +47,7 @@ namespace Hotel.Controller
             {
                 RoomNumber = roomNumber,
                 RoomSize = roomSize,
-                BedType = bedType,
+                Bed = Enum.Parse<Room.BedType>(bedType, true),
                 ExtraBed = extraBed,
             };
 
@@ -88,7 +88,7 @@ namespace Hotel.Controller
                 Console.WriteLine("Rummet finns inte.");
                 return;
             }
-            _roomService.RemoveRoom(existingRoom);
+            _roomService.DeleteRoom(existingRoom);
             Console.WriteLine("Rummet är borttaget.");
         }
 
@@ -100,7 +100,7 @@ namespace Hotel.Controller
                 Console.WriteLine(
                     $"Rumsnummer: {room.RoomNumber}" +
                     $"{Environment.NewLine}Storlek: {room.RoomSize}" +
-                    $"{Environment.NewLine}Sängtyp: {room.BedType}" +
+                    $"{Environment.NewLine}Sängtyp: {room.Bed}" +
                     $"{Environment.NewLine}Extrasängar: {room.ExtraBed}");
             }
         }

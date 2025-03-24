@@ -61,12 +61,12 @@ namespace Hotel.Controller
 
             Booking booking = new Booking()
             {
-                Rooms = new List<Room> { room },
+                Room = room,
                 CheckIn = checkInDate,
                 CheckOut = checkOutDate,
                 NumberOfGuests = numberOfGuests,
                 IsPaid = isPaid,
-                Guests = new List<Guest> { guest }
+                Guest = guest
             };
 
             _bookingService.CreateBooking(booking);
@@ -103,13 +103,12 @@ namespace Hotel.Controller
             }
             Booking booking = new Booking()
             {
-                BookingId = bookingId,
-                Rooms = new List<Room> { room },
+                Room = room,
                 CheckIn = checkInDate,
                 CheckOut = checkOutDate,
                 NumberOfGuests = numberOfGuests,
                 IsPaid = isPaid,
-                Guests = new List<Guest> { guest }
+                Guest = guest
             };
             _bookingService.UpdateBooking(bookingId, booking);
             Console.WriteLine("Bokningen har uppdaterats.");
