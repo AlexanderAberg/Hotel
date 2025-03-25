@@ -42,7 +42,7 @@ namespace Hotel.Data
 
         public static bool IfAnyDataExists(ApplicationDbContext dbContext)
         {
-            return dbContext.Bookings.Any() || dbContext.Guests.Any() || dbContext.Rooms.Any();
+            return dbContext.Guests.Any() || dbContext.Rooms.Any();
         }
 
         public static void GenerateGuests(ApplicationDbContext dbContext)
