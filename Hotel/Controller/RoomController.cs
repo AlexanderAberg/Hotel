@@ -24,14 +24,8 @@ namespace Hotel.Controller
 
             Console.WriteLine($"{Environment.NewLine}Rumsnummer:");
             Console.Write(">");
-            var roomNumber = int.Parse(Console.ReadLine());
+            var roomNumber = Console.ReadLine();
 
-            var existingRoom = _roomService.GetRoom(roomNumber);
-            if (existingRoom != null)
-            {
-                Console.WriteLine("Rummet finns redan.");
-                return;
-            }
 
             Console.WriteLine($"{Environment.NewLine}Storlek på rummet:");
             Console.Write(">");
