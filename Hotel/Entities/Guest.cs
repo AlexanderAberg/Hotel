@@ -10,10 +10,7 @@ namespace Hotel.Entities
 {
     public class Guest
     {
-        private static int _nextId = 5;
-
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int GuestId { get; set; } = GenerateGuestId();
+        public int GuestId { get; set; }
         public List <Booking> Bookings { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -21,10 +18,5 @@ namespace Hotel.Entities
         public string City { get; set; }
         [StringLength(15)]
         public string Phone { get; set; } = null!;
-
-        private static int GenerateGuestId()
-        {
-            return _nextId++;
-        }
     }
 }

@@ -10,7 +10,7 @@ namespace Hotel.Entities
     public class Room
     {
         [Key]
-        public int RoomNumber { get; set; }
+        public string RoomNumber { get; set; }
         public List<Booking> Bookings { get; set; }
         public int RoomSize { get; set; } 
         public enum BedType
