@@ -15,7 +15,6 @@ namespace Hotel.Controller
         private BookingService _bookingService;
         private RoomService _roomService;
         private GuestService _guestService;
-        private BookingService bookingService;
 
         public BookingController(BookingService bookingService, RoomService roomService, GuestService guestService)
         {
@@ -28,14 +27,14 @@ namespace Hotel.Controller
 
         public BookingController(BookingService bookingService)
         {
-            this.bookingService = bookingService;
+            _bookingService = bookingService;
         }
 
         public void CreateBooking()
         {
             Console.WriteLine("Skriv in bokningsdetaljer");
             Console.WriteLine("Skriv in rumsnummer");
-            int roomNumber = Convert.ToInt32(Console.ReadLine());
+            string roomNumber = Console.ReadLine();
             Console.WriteLine("Skriv in incheckningsdatumet");
             DateTime checkInDate = Convert.ToDateTime(Console.ReadLine());
             Console.WriteLine("Skriv in utcheckningdatumet");
@@ -81,7 +80,7 @@ namespace Hotel.Controller
             Console.WriteLine("Enter Booking Id");
             int bookingId = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Enter Room Number");
-            int roomNumber = Convert.ToInt32(Console.ReadLine());
+            string roomNumber = Console.ReadLine();
             Console.WriteLine("Enter Check In Date");
             DateTime checkInDate = Convert.ToDateTime(Console.ReadLine());
             Console.WriteLine("Enter Check Out Date");
@@ -147,9 +146,11 @@ namespace Hotel.Controller
                 return;
             }
 
+            // Skriv ut rubrikerna först
             Console.WriteLine(
                 "Booking Id\tRoom Number\tCheck In\tCheck Out\tNumber of Guests\tIs Paid\tGuest Name");
 
+            // Skriv ut varje bokning med alla relationer
             foreach (Booking booking in bookings)
             {
                 Console.WriteLine(
