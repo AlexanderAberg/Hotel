@@ -65,14 +65,14 @@ namespace Hotel.Services
             var existingBooking = _dbContext.Bookings.Find(booking.BookingId);
             if (existingBooking == null)
             {
-                return "Kan inte hitta bokning";
+                return "Kan inte hitta bokningen";
             }
 
             existingBooking.IsPaid = true;
             _dbContext.Bookings.Update(existingBooking);
             _dbContext.SaveChanges();
 
-            return "Bokning betalades";
+            return "Bokningen betalades";
         }
 
         public List<Booking> GetBookings()
