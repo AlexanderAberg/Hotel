@@ -332,6 +332,12 @@ namespace Hotel.Controller
         public void ListGuests()
         {
             var guests = _guestService.GetGuests();
+            if (guests == null)
+            {
+                Console.WriteLine("Guests list is null.");
+                return;
+            }
+
             if (guests.Any())
             {
                 foreach (var guest in guests)
@@ -343,6 +349,8 @@ namespace Hotel.Controller
             {
                 Console.WriteLine("Inga gäster hittades.");
             }
+            Console.WriteLine("Tryck på valfri tangent för att återgå till menyn");
+            Console.ReadKey();
         }
     }
 }

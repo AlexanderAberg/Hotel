@@ -20,9 +20,12 @@ namespace Hotel.Entities
         public DateTime CheckOut { get; set; }
         public int NumberOfGuests { get; set; }
         public bool IsPaid { get; set; }
-        public Room Room { get; set; }
-        public Guest Guest { get; set; }
+        public virtual Room Room { get; set; }
+        public virtual Guest Guest { get; set; }
         public bool IsAvailable { get; internal set; }
+
+        public string RoomNumber { get; set; }
+        public int GuestId { get; set; }
 
         public string GetFormattedBookingId()
         {

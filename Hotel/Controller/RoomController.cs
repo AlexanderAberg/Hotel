@@ -97,6 +97,8 @@ namespace Hotel.Controller
                     $"{Environment.NewLine}Sängtyp: {room.Bed}" +
                     $"{Environment.NewLine}Extrasängar: {room.ExtraBed}");
             }
+            Console.WriteLine("Tryck på valfri tangent för att återgå till menyn");
+            Console.ReadKey();
         }
     }
 }

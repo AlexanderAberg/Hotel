@@ -1,5 +1,6 @@
 ﻿using Hotel.Data;
 using Hotel.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,6 @@ namespace Hotel.Services
     {
         ApplicationDbContext _dbContext;
 
-
         public BookingService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -20,43 +20,69 @@ namespace Hotel.Services
 
         public void CreateBooking(Booking booking)
         {
-
             _dbContext.Bookings.Add(booking);
             _dbContext.SaveChanges();
         }
 
-
         public Booking GetBooking(int bookingId)
         {
-            return null;
+            return _dbContext.Bookings
+                .Include(b => b.Room)
+                .Include(b => b.Guest)
+                .FirstOrDefault(b => b.BookingId == bookingId);
         }
 
-
-        public List<Guest> GetAllBookings()
-        {
-            return null;
-        }
-
+        public List<Guest> AllBookings => _dbContext.Guests.ToList();
 
         public string UpdateBooking(int bookingId, Booking booking)
         {
-            return "Return status message (success or failure)";
+            var existingBooking = _dbContext.Bookings.Find(bookingId);
+            if (existingBooking == null)
+            {
+                return "Booking not found";
+            }
+
+            existingBooking.CheckIn = booking.CheckIn;
+            existingBooking.CheckOut = booking.CheckOut;
+            existingBooking.NumberOfGuests = booking.NumberOfGuests;
+            existingBooking.IsPaid = booking.IsPaid;
+            existingBooking.Room = booking.Room;
+            existingBooking.Guest = booking.Guest;
+
+            _dbContext.Bookings.Update(existingBooking);
+            _dbContext.SaveChanges();
+
+            return "Booking updated successfully";
         }
 
         public string DeleteBooking(Booking booking)
         {
-            return "Return status message (success or failure)";
+            _dbContext.Bookings.Remove(booking);
+            _dbContext.SaveChanges();
+            return "Booking deleted successfully";
         }
 
         public string PayBooking(Booking booking)
         {
-            return "Return status message (success or failure)";
-        }
+            var existingBooking = _dbContext.Bookings.Find(booking.BookingId);
+            if (existingBooking == null)
+            {
+                return "Booking not found";
+            }
 
+            existingBooking.IsPaid = true;
+            _dbContext.Bookings.Update(existingBooking);
+            _dbContext.SaveChanges();
+
+            return "Booking paid successfully";
+        }
 
         public List<Booking> GetBookings()
         {
-            return _dbContext.Bookings.ToList();
+            return _dbContext.Bookings
+                .Include(b => b.Room)
+                .Include(b => b.Guest)
+                .ToList();
         }
     }
 }

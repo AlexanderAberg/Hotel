@@ -40,9 +40,17 @@ namespace Hotel.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Room>()
-                .Property(e => e.Bed)
-                .HasConversion<string>();  // Konverterar automatiskt mellan enum och sträng
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Room)
+                .WithMany(r => r.Bookings)
+                .HasForeignKey(b => b.RoomNumber)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Guest)
+                .WithMany(g => g.Bookings)
+                .HasForeignKey(b => b.GuestId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

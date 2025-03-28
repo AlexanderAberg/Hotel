@@ -17,10 +17,13 @@ namespace Hotel.Controller
         private GuestService _guestService;
         private BookingService bookingService;
 
-        public BookingController(BookingService bookingService, RoomService roomService)
+        public BookingController(BookingService bookingService, RoomService roomService, GuestService guestService)
         {
             _bookingService = bookingService;
             _roomService = roomService;
+            _guestService = guestService;
+            var bookings = _bookingService.GetBookings();
+            Console.WriteLine($"Number of bookings retrieved: {bookings?.Count ?? 0}");
         }
 
         public BookingController(BookingService bookingService)
@@ -137,31 +140,26 @@ namespace Hotel.Controller
             }
 
             var bookings = _bookingService.GetBookings();
+
             if (bookings == null || bookings.Count == 0)
             {
                 Console.WriteLine("Inga bokningar kan hittas");
                 return;
             }
 
+            // Skriv ut rubrikerna först
             Console.WriteLine(
-                "Booking Id\tRoom Number\tCheck In\tCheck Out\tNumber of Guests\tIs Paid\tGuest Id");
+                "Booking Id\tRoom Number\tCheck In\tCheck Out\tNumber of Guests\tIs Paid\tGuest Name");
+
+            // Skriv ut varje bokning med alla relationer
             foreach (Booking booking in bookings)
             {
-                if (booking.Room == null || booking.Guest == null)
-                {
-                    Console.WriteLine($"Bokningen {booking.BookingId} har ej all data.");
-                    continue;
-                }
-
                 Console.WriteLine(
-                    booking.BookingId + "\t" +
-                    booking.Room.RoomNumber + "\t" +
-                    booking.CheckIn + "\t" +
-                    booking.CheckOut + "\t" +
-                    booking.NumberOfGuests + "\t" +
-                    booking.IsPaid + "\t" +
-                    booking.Guest.GuestId);
+                    $"{booking.BookingId}\t{booking.Room?.RoomNumber}\t{booking.CheckIn}\t{booking.CheckOut}\t{booking.NumberOfGuests}\t{booking.IsPaid}\t{booking.Guest?.FirstName + booking.Guest?.LastName}");
             }
+
+            Console.WriteLine("Tryck på valfri tangent för att återgå till menyn");
+            Console.ReadKey();
         }
 
         public void PayBooking()
