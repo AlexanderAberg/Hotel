@@ -315,7 +315,7 @@ namespace Hotel.Controller
                             return;
                         }
                     }
-                    _guestService.RemoveGuest();
+                    _guestService.RemoveGuest(guestId);
                     Console.WriteLine("Gästen har tagits bort.");
                 }
                 else

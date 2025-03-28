@@ -44,9 +44,16 @@ namespace Hotel.Services
             return "Return status message (success or failure)";
         }
 
-        public string RemoveGuest()
+        public string RemoveGuest(int guestId)
         {
-            return "Return status message (success or failure)";
+            var guest = _dbContext.Guests.Find(guestId);
+            if (guest != null)
+            {
+                _dbContext.Guests.Remove(guest);
+                _dbContext.SaveChanges();
+                return "Guest removed successfully.";
+            }
+            return "Guest not found.";
         }
 
 
