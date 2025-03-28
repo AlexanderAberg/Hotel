@@ -100,9 +100,8 @@ namespace Hotel.Migrations
                     b.Property<string>("RoomNumber")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Bed")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Bed")
+                        .HasColumnType("int");
 
                     b.Property<int>("ExtraBed")
                         .HasColumnType("int");
@@ -120,13 +119,13 @@ namespace Hotel.Migrations
                     b.HasOne("Hotel.Entities.Guest", "Guest")
                         .WithMany("Bookings")
                         .HasForeignKey("GuestId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Hotel.Entities.Room", "Room")
                         .WithMany("Bookings")
                         .HasForeignKey("RoomNumber")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Guest");

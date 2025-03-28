@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hotel.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigrate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,7 +34,7 @@ namespace Hotel.Migrations
                 {
                     RoomNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     RoomSize = table.Column<int>(type: "int", nullable: false),
-                    Bed = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Bed = table.Column<int>(type: "int", nullable: false),
                     ExtraBed = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -52,9 +52,9 @@ namespace Hotel.Migrations
                     CheckOut = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NumberOfGuests = table.Column<int>(type: "int", nullable: false),
                     IsPaid = table.Column<bool>(type: "bit", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false),
                     RoomNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    GuestId = table.Column<int>(type: "int", nullable: false),
-                    IsAvailable = table.Column<bool>(type: "bit", nullable: false)
+                    GuestId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,13 +64,13 @@ namespace Hotel.Migrations
                         column: x => x.GuestId,
                         principalTable: "Guests",
                         principalColumn: "GuestId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Bookings_Rooms_RoomNumber",
                         column: x => x.RoomNumber,
                         principalTable: "Rooms",
                         principalColumn: "RoomNumber",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
