@@ -169,7 +169,7 @@ namespace Hotel.Controller
             Console.WriteLine($"{Environment.NewLine}Förnamn:");
             Console.Write(">");
             var firstName = Console.ReadLine();
-            Console.WriteLine($"{Environment.NewLine}Förnamn:");
+            Console.WriteLine($"{Environment.NewLine}Efternamn:");
             Console.Write(">");
             var lastName = Console.ReadLine();
             Console.Write(">");
