@@ -11,7 +11,7 @@ namespace Hotel.Services
 {
     public class BookingService
     {
-        ApplicationDbContext _dbContext;
+        private ApplicationDbContext _dbContext;
 
         public BookingService(ApplicationDbContext dbContext)
         {
@@ -32,14 +32,12 @@ namespace Hotel.Services
                 .FirstOrDefault(b => b.BookingId == bookingId);
         }
 
-        public List<Guest> AllBookings => _dbContext.Guests.ToList();
-
         public string UpdateBooking(int bookingId, Booking booking)
         {
             var existingBooking = _dbContext.Bookings.Find(bookingId);
             if (existingBooking == null)
             {
-                return "Booking not found";
+                return "Kan inte hitta bokningen";
             }
 
             existingBooking.CheckIn = booking.CheckIn;
@@ -52,14 +50,14 @@ namespace Hotel.Services
             _dbContext.Bookings.Update(existingBooking);
             _dbContext.SaveChanges();
 
-            return "Booking updated successfully";
+            return "Bokningen uppdaterades";
         }
 
         public string DeleteBooking(Booking booking)
         {
             _dbContext.Bookings.Remove(booking);
             _dbContext.SaveChanges();
-            return "Booking deleted successfully";
+            return "Bokningen togs bort";
         }
 
         public string PayBooking(Booking booking)
@@ -67,14 +65,14 @@ namespace Hotel.Services
             var existingBooking = _dbContext.Bookings.Find(booking.BookingId);
             if (existingBooking == null)
             {
-                return "Booking not found";
+                return "Kan inte hitta bokning";
             }
 
             existingBooking.IsPaid = true;
             _dbContext.Bookings.Update(existingBooking);
             _dbContext.SaveChanges();
 
-            return "Booking paid successfully";
+            return "Bokning betalades";
         }
 
         public List<Booking> GetBookings()
@@ -83,6 +81,13 @@ namespace Hotel.Services
                 .Include(b => b.Room)
                 .Include(b => b.Guest)
                 .ToList();
+        }
+
+        public bool IsRoomAvailable(Room room, DateTime checkIn, DateTime checkOut)
+        {
+            return _dbContext.Bookings
+                .Where(b => b.RoomNumber == room.RoomNumber)
+                .All(b => b.CheckOut <= checkIn || b.CheckIn >= checkOut);
         }
     }
 }
