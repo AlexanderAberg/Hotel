@@ -147,11 +147,9 @@ namespace Hotel.Controller
                 return;
             }
 
-            // Skriv ut rubrikerna först
             Console.WriteLine(
                 "Booking Id\tRoom Number\tCheck In\tCheck Out\tNumber of Guests\tIs Paid\tGuest Name");
 
-            // Skriv ut varje bokning med alla relationer
             foreach (Booking booking in bookings)
             {
                 Console.WriteLine(

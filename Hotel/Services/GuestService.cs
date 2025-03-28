@@ -20,40 +20,90 @@ namespace Hotel.Services
 
         public void CreateGuest(Guest guest)
         {
+            if (guest == null)
+            {
+                string message = "Skapande misslyckades: guest är null.";
+                Console.WriteLine(message);
+                Console.ReadLine();
+                return;
+            }
 
             _dbContext.Guests.Add(guest);
             _dbContext.SaveChanges();
+            string successMessage = $"Gäst med ID {guest.GuestId} skapades framgångsrikt.";
+            Console.WriteLine(successMessage);
+            Console.ReadLine();
         }
 
 
         public Guest GetGuest(int guestId)
         {
-            return null;
+            var guest = _dbContext.Guests.Find(guestId);
+            if (guest == null)
+            {
+                Console.WriteLine($"Gäst med ID {guestId} kan inte hittas.");
+                Console.ReadLine();
+                return null;
+            }
+            return guest;
         }
 
 
         public List<Guest> GetAllGuests()
         {
-            return null;
+            return _dbContext.Guests.ToList();
         }
 
 
-        public string UpdateGuest(int guestId)
+        public string UpdateGuest(int guestId, Guest updatedGuest)
         {
+            if (updatedGuest == null)
+            {
+                string message = "Uppdatering misslyckades: updatedGuest är null.";
+                Console.WriteLine(message);
+                Console.ReadLine();
+                return message;
+            }
 
-            return "Return status message (success or failure)";
+            var guest = _dbContext.Guests.Find(guestId);
+            if (guest == null)
+            {
+                string message = $"Uppdatering misslyckades: Gäst med ID {guestId} kan inte hittas.";
+                Console.WriteLine(message);
+                Console.ReadLine(); 
+                return message;
+            }
+
+            guest.FirstName = updatedGuest.FirstName;
+            guest.LastName = updatedGuest.LastName;
+            guest.Email = updatedGuest.Email;
+            guest.City = updatedGuest.City;
+            guest.Phone = updatedGuest.Phone;
+
+            _dbContext.SaveChanges();
+            string successMessage = $"Gäst med ID {guestId} uppdaterades framgångsrikt.";
+            Console.WriteLine(successMessage);
+            Console.ReadLine(); 
+            return successMessage;
         }
+
 
         public string RemoveGuest(int guestId)
         {
             var guest = _dbContext.Guests.Find(guestId);
-            if (guest != null)
+            if (guest == null)
             {
-                _dbContext.Guests.Remove(guest);
-                _dbContext.SaveChanges();
-                return "Guest removed successfully.";
+                string message = $"Borttagning misslyckades: Gäst med ID {guestId} kan inte hittas.";
+                Console.WriteLine(message);
+                Console.ReadLine();
+                return message;
             }
-            return "Guest not found.";
+            _dbContext.Guests.Remove(guest);
+            _dbContext.SaveChanges();
+            string successMessage = $"Gäst med ID {guestId} borttagen.";
+            Console.WriteLine(successMessage);
+            Console.ReadLine();
+            return successMessage;
         }
 
 

@@ -182,22 +182,6 @@ namespace Hotel.Controller
             Console.Write(">");
             var phone = Console.ReadLine();
 
-            var availableBookings = _roomService.GetRooms();
-
-
-            Console.WriteLine($"{Environment.NewLine}Välj rum:");
-
-            var counter = 1;
-            foreach (var booking in availableBookings)
-            {
-                Console.WriteLine($"{counter}. Room Number: {booking.RoomNumber}, Room Size: {booking.RoomSize}, Bed Type: {booking.Bed}");
-                counter++;
-            }
-
-            var selection = ValidateSelection(availableBookings.Count);
-
-            var selectedBooking = availableBookings[selection - 1];
-
             var newGuest = new Guest
             {
                 FirstName = firstName,
@@ -273,8 +257,8 @@ namespace Hotel.Controller
                     var phone = Console.ReadLine();
                     if (!string.IsNullOrEmpty(phone)) guest.Phone = phone;
 
-                    _guestService.UpdateGuest(guestId);
-                    Console.WriteLine("Gästinformation har uppdaterats!");
+                    var result = _guestService.UpdateGuest(guestId, guest);
+                    Console.WriteLine(result);
                 }
                 else
                 {
@@ -296,7 +280,7 @@ namespace Hotel.Controller
                 var guest = _guestService.GetGuest(guestId);
                 if (guest != null)
                 {
-                    if (guest.Bookings.Any())
+                    if (guest.Bookings != null && guest.Bookings.Any())
                     {
                         Console.WriteLine("Gästen har aktiva bokningar. Vill du ta bort dem också? (ja/nej)");
                         Console.Write("> ");
