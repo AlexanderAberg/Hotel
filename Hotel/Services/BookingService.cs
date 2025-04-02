@@ -20,11 +20,34 @@ namespace Hotel.Services
 
         public void CreateBooking(Booking booking)
         {
+            if (booking == null)
+                throw new ArgumentNullException(nameof(booking));
+
+            if (booking.CheckOut <= booking.CheckIn)
+                throw new ArgumentException("Utcheckningsdatumet måste vara efter incheckningsdatumet");
+
+            if (booking.NumberOfGuests < 1)
+                throw new ArgumentException("Antal gäster måste vara minst 1");
+
+            if ((booking.CheckIn - DateTime.Now).TotalDays <= 10)
+                booking.IsPaid = true;
+            else
+                booking.IsPaid = false;
+            if ((booking.CheckIn - DateTime.Now).TotalDays < 10)
+                booking.IsPaid = true;
+            else
+                throw new ArgumentException("Bokningen måste betalas direkt, eftersom det är färre än 10 dagar till vistelse");
+            
+
             _dbContext.Bookings.Add(booking);
             _dbContext.SaveChanges();
+            string successMessage = $"Bokning med ID {booking.BookingId} skapades framgångsrikt.";
+            Console.WriteLine(successMessage);
+            Console.ReadLine();
         }
 
-        public Booking GetBooking(int bookingId)
+
+        public Booking? GetBooking(int bookingId)
         {
             return _dbContext.Bookings
                 .Include(b => b.Room)
