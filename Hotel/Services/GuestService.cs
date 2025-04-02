@@ -111,5 +111,10 @@ namespace Hotel.Services
         {
             return _dbContext.Guests.ToList();
         }
+
+        internal Guest GetGuest(object guestId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
