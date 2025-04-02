@@ -18,6 +18,7 @@ namespace Hotel.Controller
         {
             _roomService = roomService;
         }
+
         public void CreateRoom()
         {
             Console.WriteLine("Skriv in rumsinformation: ");
@@ -69,7 +70,7 @@ namespace Hotel.Controller
                               $"{Environment.NewLine}1. Storlek på rummet" +
                               $"{Environment.NewLine}2. Sängtyp" +
                               $"{Environment.NewLine}3. Antal extrasängar");
-            Console.Write(">");
+            Console.Write("> ");
             var choice = int.Parse(Console.ReadLine());
 
             switch (choice)
@@ -123,18 +124,16 @@ namespace Hotel.Controller
             Console.ReadKey();
         }
 
-
-
         public void ListRooms()
         {
             var rooms = _roomService.GetRooms();
             foreach (var room in rooms)
             {
                 Console.WriteLine(
-                    $"Rumsnummer: {room.RoomNumber}" +
-                    $"{Environment.NewLine}Storlek: {room.RoomSize}" +
-                    $"{Environment.NewLine}Sängtyp: {room.Bed}" +
-                    $"{Environment.NewLine}Extrasängar: {room.ExtraBed}");
+                    $@"Rumsnummer: {room.RoomNumber}
+                    Storlek: {room.RoomSize}
+                    Sängtyp: {room.Bed}
+                    Extrasängar: {room.ExtraBed}");
             }
             Console.WriteLine("Tryck på valfri tangent för att återgå till menyn");
             Console.ReadKey();
