@@ -12,6 +12,7 @@ namespace Hotel.Menus
     public class Menu
     {
         private ApplicationDbContext _dbContext;
+
         public Menu(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -35,7 +36,9 @@ namespace Hotel.Menus
 
                 var guestController = new GuestController(new GuestService(_dbContext));
                 var roomController = new RoomController(new RoomService(_dbContext));
-                var bookingController = new BookingController(new BookingService(_dbContext));
+                var bookingController = new BookingController(new RoomService(_dbContext),
+                                                            new GuestService(_dbContext),
+                                                            new BookingService(_dbContext));
 
                 switch (choice)
                 {
@@ -174,7 +177,9 @@ namespace Hotel.Menus
                 Console.WriteLine("5. Betala bokning");
                 Console.WriteLine("0. Tillbaka");
                 var choice = Console.ReadLine();
-                var bookingController = new BookingController(new BookingService(_dbContext));
+                var bookingController = new BookingController(new RoomService(_dbContext),
+                                                            new GuestService(_dbContext),
+                                                            new BookingService(_dbContext));
 
                 switch (choice)
                 {
