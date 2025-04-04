@@ -23,74 +23,82 @@ namespace Hotel.Controller
             _bookingService = bookingService ?? throw new ArgumentNullException(nameof(bookingService));
         }
 
-        public BookingController(BookingService bookingService)
-        {
-            _bookingService = bookingService;
-        }
-
         public void CreateBooking()
         {
-            Console.WriteLine("Skriv in bokningsdetaljer");
-
-            string roomNumber = GetValidRoomNumber();
-            if (string.IsNullOrEmpty(roomNumber))
-                return;
-
-            DateTime checkInDate = GetValidDate("Skriv in incheckningsdatumet (ÅÅÅÅ-MM-DD): ");
-            if (checkInDate == DateTime.MinValue)
-                return;
-
-            DateTime checkOutDate = GetValidDate("Skriv in utcheckningsdatumet (ÅÅÅÅ-MM-DD): ");
-            if (checkOutDate == DateTime.MinValue)
-                return;
-
-            int numberOfGuests = GetValidNumberOfGuests();
-            if (numberOfGuests == 0)
-                return;
-
-            int guestId = GetValidGuestId();
-            if (guestId == 0)
-                return;
-
-            Room room = _roomService.GetRoom(roomNumber);
-            Guest guest = _guestService.GetGuest(guestId);
-
-            if (room == null)
-            {
-                Console.WriteLine("Rummet finns inte.");
-                return;
-            }
-
-            if (guest == null)
-            {
-                Console.WriteLine("Kan inte hitta gäst.");
-                return;
-            }
-
-            if (!_bookingService.IsRoomAvailable(room, checkInDate, checkOutDate))
-            {
-                Console.WriteLine("Rummet är inte tillgängligt under den valda perioden.");
-                return;
-            }
-
-            Booking booking = new Booking()
-            {
-                Room = room,
-                CheckIn = checkInDate,
-                CheckOut = checkOutDate,
-                NumberOfGuests = numberOfGuests,
-                IsPaid = false,
-                Guest = guest
-            };
-
             try
             {
-                _bookingService.CreateBooking(booking);
-                Console.WriteLine($"Bokningen har skapats och kommer ha detta bokningsId: {booking.BookingId}");
+                Console.WriteLine("Skriv in bokningsdetaljer");
+
+                string roomNumber = GetValidRoomNumber();
+                if (string.IsNullOrEmpty(roomNumber))
+                    return;
+
+                DateTime checkInDate = GetValidDate("Skriv in incheckningsdatumet (ÅÅÅÅ-MM-DD): ");
+                if (checkInDate == DateTime.MinValue)
+                    return;
+
+                DateTime checkOutDate = GetValidDate("Skriv in utcheckningsdatumet (ÅÅÅÅ-MM-DD): ");
+                if (checkOutDate == DateTime.MinValue)
+                    return;
+
+                int numberOfGuests = GetValidNumberOfGuests();
+                if (numberOfGuests == 0)
+                    return;
+
+                int guestId = GetValidGuestId();
+                if (guestId == 0)
+                    return;
+
+                Room room = _roomService.GetRoom(roomNumber);
+                if (room == null)
+                {
+                    Console.WriteLine($"Rummet {roomNumber} finns inte.");
+                    return;
+                }
+
+                Guest guest = _guestService.GetGuest(guestId);
+                if (guest == null)
+                {
+                    Console.WriteLine("Kan inte hitta gäst.");
+                    return;
+                }
+
+                if (!_bookingService.IsRoomAvailable(room, checkInDate, checkOutDate))
+                {
+                    Console.WriteLine($"Rummet är inte tillgängligt mellan {checkInDate} och {checkOutDate}");
+                    return;
+                }
+
+                Console.Write("Är bokningen betald? (true/false): ");
+                bool isPaid = Convert.ToBoolean(Console.ReadLine());
+
+                var newBooking = new Booking()
+                {
+                    Room = room,
+                    CheckIn = checkInDate,
+                    CheckOut = checkOutDate,
+                    NumberOfGuests = numberOfGuests,
+                    IsPaid = isPaid,
+                    Guest = guest
+                };
+
+                try
+                {
+                    _bookingService.CreateBooking(newBooking);
+                    Console.WriteLine($"Bokningen har skapats med ID: {newBooking.BookingId}");
+                    Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                    Console.ReadKey();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ett fel uppstod vid bokningsskapandet: {ex.Message}");
+                    if (ex.InnerException != null)
+                        Console.WriteLine($"Teknisk information: {ex.InnerException.Message}");
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ett fel uppstod när bokningen skulle skapas: {ex.Message}");
+                Console.WriteLine($"Ett oväntat fel uppstod: {ex.Message}");
             }
         }
 
@@ -153,7 +161,7 @@ namespace Hotel.Controller
             }
 
             _bookingService.DeleteBooking(booking);
-            Console.WriteLine("Bokningen har tagit bort.");
+            Console.WriteLine("Bokningen har tagits bort.");
         }
 
         public void ListBookings()
@@ -171,14 +179,14 @@ namespace Hotel.Controller
                 Console.WriteLine("Inga bokningar kan hittas");
                 return;
             }
-            Console.WriteLine(
-                "Booking Id\tRoom Number\tCheck In\tCheck Out\tNumber of Guests\tIs Paid\tGuest Name");
+
+            Console.WriteLine("Booking Id\tRoom Number\tCheck In\tCheck Out\tNumber of Guests\tIs Paid\tGuest Name");
 
             foreach (Booking booking in bookings)
             {
-                Console.WriteLine(
-                    $"{booking.BookingId}\t{booking.Room?.RoomNumber}\t{booking.CheckIn}\t{booking.CheckOut}\t{booking.NumberOfGuests}\t{booking.IsPaid}\t{booking.Guest?.FirstName + booking.Guest?.LastName}");
+                Console.WriteLine($"{booking.BookingId}\t{booking.Room?.RoomNumber}\t{booking.CheckIn}\t{booking.CheckOut}\t{booking.NumberOfGuests}\t{booking.IsPaid}\t{booking.Guest?.FirstName + " " + booking.Guest?.LastName}");
             }
+
             Console.WriteLine("Tryck på valfri tangent för att återgå till menyn");
             Console.ReadKey();
         }
