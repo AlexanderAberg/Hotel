@@ -10,14 +10,9 @@ using System.Threading.Tasks;
 
 namespace Hotel.Controller
 {
-    public class RoomController
+    public class RoomController(RoomService roomService)
     {
-        private RoomService _roomService;
-
-        public RoomController(RoomService roomService)
-        {
-            _roomService = roomService;
-        }
+        private readonly RoomService _roomService = roomService;
 
         public void CreateRoom()
         {
@@ -26,16 +21,40 @@ namespace Hotel.Controller
             Console.WriteLine($"{Environment.NewLine}Rumsnummer:");
             Console.Write(">");
             var roomNumber = Console.ReadLine();
+            if (string.IsNullOrEmpty(roomNumber))
+            {
+                Console.WriteLine("Ogiltig inmatning för rumsnummer.");
+                return;
+            }
 
             Console.WriteLine($"{Environment.NewLine}Storlek på rummet:");
             Console.Write(">");
-            var roomSize = int.Parse(Console.ReadLine());
+            var roomSizeInput = Console.ReadLine();
+            if (string.IsNullOrEmpty(roomSizeInput))
+            {
+                Console.WriteLine("Ogiltig inmatning för rumsstorlek.");
+                return;
+            }
+            var roomSize = int.Parse(roomSizeInput);
+
             Console.WriteLine($"{Environment.NewLine}Sängtyp:");
             Console.Write(">");
             var bedType = Console.ReadLine();
+            if (string.IsNullOrEmpty(bedType))
+            {
+                Console.WriteLine("Ogiltig inmatning för sängtyp.");
+                return;
+            }
+
             Console.WriteLine($"{Environment.NewLine}Hur många extrasängar får plats:");
             Console.Write(">");
-            var extraBed = int.Parse(Console.ReadLine());
+            var extraBedInput = Console.ReadLine();
+            if (string.IsNullOrEmpty(extraBedInput))
+            {
+                Console.WriteLine("Ogiltig inmatning för extrasängar.");
+                return;
+            }
+            var extraBed = int.Parse(extraBedInput);
 
             var newRoom = new Room
             {
@@ -57,7 +76,15 @@ namespace Hotel.Controller
             Console.Write(">");
             var roomNumber = Console.ReadLine();
 
-            var existingRoom = _roomService.GetRoom(roomNumber);
+            if (string.IsNullOrEmpty(roomNumber))
+            {
+                Console.WriteLine("Ogiltig inmatning för rumsnummer.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
+                return;
+            }
+
+            var existingRoom = _roomService.GetRoom(roomNumber: roomNumber);
             if (existingRoom == null)
             {
                 Console.WriteLine("Rummet finns inte.");
@@ -71,24 +98,55 @@ namespace Hotel.Controller
                               $"{Environment.NewLine}2. Sängtyp" +
                               $"{Environment.NewLine}3. Antal extrasängar");
             Console.Write("> ");
-            var choice = int.Parse(Console.ReadLine());
-
+            var choiceInput = Console.ReadLine();
+            if (string.IsNullOrEmpty(choiceInput))
+            {
+                Console.WriteLine("Ogiltig inmatning.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
+                return;
+            }
+            var choice = int.Parse(choiceInput);
             switch (choice)
             {
                 case 1:
                     Console.WriteLine("Ange ny storlek på rummet:");
                     Console.Write(">");
-                    existingRoom.RoomSize = int.Parse(Console.ReadLine());
+                    var roomSizeInput = Console.ReadLine();
+                    if (string.IsNullOrEmpty(roomSizeInput))
+                    {
+                        Console.WriteLine("Ogiltig inmatning för rumsstorlek.");
+                        Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                        Console.ReadKey();
+                        return;
+                    }
+                    existingRoom.RoomSize = int.Parse(roomSizeInput);
                     break;
                 case 2:
                     Console.WriteLine("Ange ny sängtyp:");
                     Console.Write(">");
-                    existingRoom.Bed = Enum.Parse<Room.BedType>(Console.ReadLine(), true);
+                    var bedTypeInput = Console.ReadLine();
+                    if (string.IsNullOrEmpty(bedTypeInput))
+                    {
+                        Console.WriteLine("Ogiltig inmatning för sängtyp.");
+                        Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                        Console.ReadKey();
+                        return;
+                    }
+                    existingRoom.Bed = Enum.Parse<Room.BedType>(bedTypeInput, true);
                     break;
                 case 3:
                     Console.WriteLine("Ange nytt antal extrasängar:");
                     Console.Write(">");
-                    existingRoom.ExtraBed = int.Parse(Console.ReadLine());
+                    var extraBedInput = Console.ReadLine();
+                    if (string.IsNullOrEmpty(extraBedInput))
+                    {
+                        Console.WriteLine("Ogiltig inmatning för extrasängar.");
+                        Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                        Console.ReadKey();
+                        return;
+                    }
+                    existingRoom.ExtraBed = int.Parse(extraBedInput);
                     break;
                 default:
                     Console.WriteLine("Ogiltigt val.");
@@ -108,6 +166,14 @@ namespace Hotel.Controller
             Console.WriteLine("Vilket rum vill du ta bort? Ange rumsnummer:");
             Console.Write(">");
             var roomNumber = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(roomNumber))
+            {
+                Console.WriteLine("Ogiltig inmatning för rumsnummer.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
+                return;
+            }
 
             var existingRoom = _roomService.GetRoom(roomNumber);
             if (existingRoom == null)
@@ -131,9 +197,9 @@ namespace Hotel.Controller
             {
                 Console.WriteLine(
                     $@"Rumsnummer: {room.RoomNumber}
-                    Storlek: {room.RoomSize}
-                    Sängtyp: {room.Bed}
-                    Extrasängar: {room.ExtraBed}");
+                                Storlek: {room.RoomSize}
+                                Sängtyp: {room.Bed}
+                                Extrasängar: {room.ExtraBed}");
             }
             Console.WriteLine("Tryck på valfri tangent för att återgå till menyn");
             Console.ReadKey();

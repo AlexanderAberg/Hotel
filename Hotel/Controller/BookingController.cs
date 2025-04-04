@@ -10,18 +10,11 @@ using System.Threading.Tasks;
 
 namespace Hotel.Controller
 {
-    public class BookingController
+    public class BookingController(RoomService roomService, GuestService guestService, BookingService bookingService)
     {
-        private readonly RoomService _roomService;
-        private readonly GuestService _guestService;
-        private readonly BookingService _bookingService;
-
-        public BookingController(RoomService roomService, GuestService guestService, BookingService bookingService)
-        {
-            _roomService = roomService ?? throw new ArgumentNullException(nameof(roomService));
-            _guestService = guestService ?? throw new ArgumentNullException(nameof(guestService));
-            _bookingService = bookingService ?? throw new ArgumentNullException(nameof(bookingService));
-        }
+        private readonly RoomService _roomService = roomService ?? throw new ArgumentNullException(nameof(roomService));
+        private readonly GuestService _guestService = guestService ?? throw new ArgumentNullException(nameof(guestService));
+        private readonly BookingService _bookingService = bookingService ?? throw new ArgumentNullException(nameof(bookingService));
 
         public void CreateBooking()
         {
@@ -49,14 +42,14 @@ namespace Hotel.Controller
                 if (guestId == 0)
                     return;
 
-                Room room = _roomService.GetRoom(roomNumber);
+                Room? room = _roomService.GetRoom(roomNumber);
                 if (room == null)
                 {
                     Console.WriteLine($"Rummet {roomNumber} finns inte.");
                     return;
                 }
 
-                Guest guest = _guestService.GetGuest(guestId);
+                Guest? guest = _guestService.GetGuest(guestId);
                 if (guest == null)
                 {
                     Console.WriteLine("Kan inte hitta gäst.");
@@ -107,7 +100,12 @@ namespace Hotel.Controller
             Console.WriteLine("Skriv in bokningsId");
             int bookingId = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Skriv in rumsnummer");
-            string roomNumber = Console.ReadLine();
+            string? roomNumber = Console.ReadLine();
+            if (string.IsNullOrEmpty(roomNumber))
+            {
+                Console.WriteLine("Rumsnummer kan inte vara tomt.");
+                return;
+            }
             Console.WriteLine("Skriv in incheckningsdatum");
             DateTime checkInDate = Convert.ToDateTime(Console.ReadLine());
             Console.WriteLine("Skriv in utcheckningsdatum");
@@ -119,8 +117,8 @@ namespace Hotel.Controller
             Console.WriteLine("Skriv in gästId");
             int guestId = Convert.ToInt32(Console.ReadLine());
 
-            Room room = _roomService.GetRoom(roomNumber);
-            Guest guest = _guestService.GetGuest(guestId);
+            Room? room = _roomService.GetRoom(roomNumber);
+            Guest? guest = _guestService.GetGuest(guestId);
 
             if (room == null)
             {
@@ -134,25 +132,34 @@ namespace Hotel.Controller
                 return;
             }
 
-            Booking booking = new Booking()
+            Booking? existingBooking = _bookingService.GetBooking(bookingId);
+            if (existingBooking == null)
             {
-                Room = room,
-                CheckIn = checkInDate,
-                CheckOut = checkOutDate,
-                NumberOfGuests = numberOfGuests,
-                IsPaid = isPaid,
-                Guest = guest
-            };
+                Console.WriteLine("Bokningen kan inte hittas.");
+                return;
+            }
 
-            _bookingService.UpdateBooking(bookingId, booking);
+            existingBooking.Room = room;
+            existingBooking.CheckIn = checkInDate;
+            existingBooking.CheckOut = checkOutDate;
+            existingBooking.NumberOfGuests = numberOfGuests;
+            existingBooking.IsPaid = isPaid;
+            existingBooking.Guest = guest;
+
+            _bookingService.UpdateBooking(bookingId, existingBooking);
             Console.WriteLine("Bokningen har uppdaterats.");
         }
 
-        public void DeleteBooking()
+        public BookingService Get_bookingService()
+        {
+            return _bookingService;
+        }
+
+        public static void DeleteBooking(BookingService _bookingService)
         {
             Console.WriteLine("Skriv in bokningsId");
             int bookingId = Convert.ToInt32(Console.ReadLine());
-            Booking booking = _bookingService.GetBooking(bookingId);
+            Booking? booking = _bookingService.GetBooking(bookingId);
 
             if (booking == null)
             {
@@ -195,7 +202,7 @@ namespace Hotel.Controller
         {
             Console.WriteLine("Skriv in bokningsId");
             int bookingId = Convert.ToInt32(Console.ReadLine());
-            Booking booking = _bookingService.GetBooking(bookingId);
+            Booking? booking = _bookingService.GetBooking(bookingId);
 
             if (booking == null)
             {
@@ -207,12 +214,12 @@ namespace Hotel.Controller
             Console.WriteLine("Bokningens betalning har gått igenom.");
         }
 
-        private string GetValidRoomNumber()
+        private static string GetValidRoomNumber()
         {
             while (true)
             {
                 Console.Write("Skriv in rumsnummer: ");
-                string roomNumber = Console.ReadLine();
+                string? roomNumber = Console.ReadLine();
 
                 if (!string.IsNullOrWhiteSpace(roomNumber))
                     return roomNumber;
@@ -221,12 +228,12 @@ namespace Hotel.Controller
             }
         }
 
-        private DateTime GetValidDate(string prompt)
+        private static DateTime GetValidDate(string prompt)
         {
             while (true)
             {
                 Console.Write(prompt);
-                string dateInput = Console.ReadLine();
+                string? dateInput = Console.ReadLine();
 
                 if (DateTime.TryParse(dateInput, out DateTime date))
                 {
@@ -240,7 +247,7 @@ namespace Hotel.Controller
             }
         }
 
-        private int GetValidNumberOfGuests()
+        private static int GetValidNumberOfGuests()
         {
             while (true)
             {
@@ -252,7 +259,7 @@ namespace Hotel.Controller
             }
         }
 
-        private int GetValidGuestId()
+        private static int GetValidGuestId()
         {
             while (true)
             {

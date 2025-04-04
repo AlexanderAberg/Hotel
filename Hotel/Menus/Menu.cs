@@ -9,17 +9,12 @@ using System.Threading.Tasks;
 
 namespace Hotel.Menus
 {
-    public class Menu
+    public class Menu(ApplicationDbContext dbContext)
     {
-        private ApplicationDbContext _dbContext;
-
-        public Menu(ApplicationDbContext dbContext)
+        public void Start(RoomController roomController)
         {
-            _dbContext = dbContext;
-        }
+            ArgumentNullException.ThrowIfNull(roomController);
 
-        public void Start()
-        {
             while (true)
             {
                 Console.Clear();
@@ -34,12 +29,7 @@ namespace Hotel.Menus
                 Console.WriteLine("0. Avsluta");
                 var choice = Console.ReadLine();
 
-                var guestController = new GuestController(new GuestService(_dbContext));
-                var roomController = new RoomController(new RoomService(_dbContext));
-                var bookingController = new BookingController(new RoomService(_dbContext),
-                                                            new GuestService(_dbContext),
-                                                            new BookingService(_dbContext));
-
+                var guestController = new GuestController(new GuestService(dbContext));
                 switch (choice)
                 {
                     case "1":
@@ -90,7 +80,7 @@ namespace Hotel.Menus
                 Console.WriteLine("0. Tillbaka");
                 var choice = Console.ReadLine();
 
-                var guestController = new GuestController(new GuestService(_dbContext));
+                var guestController = new GuestController(new GuestService(dbContext));
 
                 switch (choice)
                 {
@@ -133,7 +123,7 @@ namespace Hotel.Menus
                 Console.WriteLine("4. Rumslista");
                 Console.WriteLine("0. Tillbaka");
                 var choice = Console.ReadLine();
-                var roomController = new RoomController(new RoomService(_dbContext));
+                var roomController = new RoomController(new RoomService(dbContext));
 
                 switch (choice)
                 {
@@ -177,9 +167,9 @@ namespace Hotel.Menus
                 Console.WriteLine("5. Betala bokning");
                 Console.WriteLine("0. Tillbaka");
                 var choice = Console.ReadLine();
-                var bookingController = new BookingController(new RoomService(_dbContext),
-                                                            new GuestService(_dbContext),
-                                                            new BookingService(_dbContext));
+                var bookingController = new BookingController(new RoomService(dbContext),
+                                                            new GuestService(dbContext),
+                                                            new BookingService(dbContext));
 
                 switch (choice)
                 {
@@ -193,7 +183,7 @@ namespace Hotel.Menus
                         break;
                     case "3":
                         Console.Clear();
-                        bookingController.DeleteBooking();
+                        BookingController.DeleteBooking(bookingController.Get_bookingService());
                         break;
                     case "4":
                         Console.Clear();
@@ -213,7 +203,7 @@ namespace Hotel.Menus
             }
         }
 
-        public void PressAnyKeyToContinue()
+        public static void PressAnyKeyToContinue()
         {
             Console.WriteLine("\nTryck på valfri tangent för att fortsätta...");
             Console.ReadKey();
