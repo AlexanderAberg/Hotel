@@ -24,6 +24,16 @@ namespace Hotel.Controller
             if (string.IsNullOrEmpty(roomNumber))
             {
                 Console.WriteLine("Ogiltig inmatning för rumsnummer.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
+                return;
+            }
+            var existingRoom = _roomService.GetRoom(roomNumber);
+            if (existingRoom != null)
+            {
+                Console.WriteLine("Rumsnumret finns redan.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
                 return;
             }
 
@@ -33,6 +43,8 @@ namespace Hotel.Controller
             if (string.IsNullOrEmpty(roomSizeInput))
             {
                 Console.WriteLine("Ogiltig inmatning för rumsstorlek.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
                 return;
             }
             var roomSize = int.Parse(roomSizeInput);
@@ -43,6 +55,8 @@ namespace Hotel.Controller
             if (string.IsNullOrEmpty(bedType))
             {
                 Console.WriteLine("Ogiltig inmatning för sängtyp.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
                 return;
             }
 
@@ -52,6 +66,8 @@ namespace Hotel.Controller
             if (string.IsNullOrEmpty(extraBedInput))
             {
                 Console.WriteLine("Ogiltig inmatning för extrasängar.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
                 return;
             }
             var extraBed = int.Parse(extraBedInput);

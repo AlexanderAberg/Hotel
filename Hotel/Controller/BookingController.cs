@@ -34,7 +34,16 @@ namespace Hotel.Controller
                 if (checkOutDate == DateTime.MinValue)
                     return;
 
-                int numberOfGuests = GetValidNumberOfGuests();
+                Room? room = _roomService.GetRoom(roomNumber);
+                if (room == null)
+                {
+                    Console.WriteLine($"Rummet {roomNumber} finns inte.");
+                    Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                    Console.ReadKey();
+                    return;
+                }
+
+                int numberOfGuests = GetValidNumberOfGuests(room);
                 if (numberOfGuests == 0)
                     return;
 
@@ -42,23 +51,20 @@ namespace Hotel.Controller
                 if (guestId == 0)
                     return;
 
-                Room? room = _roomService.GetRoom(roomNumber);
-                if (room == null)
-                {
-                    Console.WriteLine($"Rummet {roomNumber} finns inte.");
-                    return;
-                }
-
                 Guest? guest = _guestService.GetGuest(guestId);
                 if (guest == null)
                 {
                     Console.WriteLine("Kan inte hitta gäst.");
+                    Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                    Console.ReadKey();
                     return;
                 }
 
                 if (!_bookingService.IsRoomAvailable(room, checkInDate, checkOutDate))
                 {
                     Console.WriteLine($"Rummet är inte tillgängligt mellan {checkInDate} och {checkOutDate}");
+                    Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                    Console.ReadKey();
                     return;
                 }
 
@@ -109,6 +115,8 @@ namespace Hotel.Controller
             if (string.IsNullOrEmpty(roomNumber))
             {
                 Console.WriteLine("Rumsnummer kan inte vara tomt.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
                 return;
             }
             Console.WriteLine("Skriv in incheckningsdatum");
@@ -128,12 +136,16 @@ namespace Hotel.Controller
             if (room == null)
             {
                 Console.WriteLine("Rummet existerar inte");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
                 return;
             }
 
             if (guest == null)
             {
                 Console.WriteLine("Kan inte hitta gäst.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
                 return;
             }
 
@@ -141,6 +153,8 @@ namespace Hotel.Controller
             if (existingBooking == null)
             {
                 Console.WriteLine("Bokningen kan inte hittas.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
                 return;
             }
 
@@ -153,6 +167,8 @@ namespace Hotel.Controller
 
             _bookingService.UpdateBooking(bookingId, existingBooking);
             Console.WriteLine("Bokningen har uppdaterats.");
+            Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+            Console.ReadKey();
         }
 
         public BookingService Get_bookingService()
@@ -169,11 +185,15 @@ namespace Hotel.Controller
             if (booking == null)
             {
                 Console.WriteLine("Bokningen kan inte hittas.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
                 return;
             }
 
             _bookingService.DeleteBooking(booking);
             Console.WriteLine("Bokningen har tagits bort.");
+            Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+            Console.ReadKey();
         }
 
         public void ListBookings()
@@ -213,11 +233,15 @@ namespace Hotel.Controller
             if (booking == null)
             {
                 Console.WriteLine("Kan inte hitta bokningen");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
                 return;
             }
 
             _bookingService.PayBooking(booking);
             Console.WriteLine("Bokningens betalning har gått igenom.");
+            Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+            Console.ReadKey();
         }
 
         private static string GetValidRoomNumber()
@@ -231,6 +255,8 @@ namespace Hotel.Controller
                     return roomNumber;
 
                 Console.WriteLine("Rumsnummer kan inte vara tomt. Försök igen.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
             }
         }
 
@@ -250,18 +276,23 @@ namespace Hotel.Controller
                 }
                 else
                     Console.WriteLine("Ogiltigt datum. Använd formatet ÅÅÅÅ-MM-DD.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
             }
         }
 
-        private static int GetValidNumberOfGuests()
+        private static int GetValidNumberOfGuests(Room room)
         {
+            int maxGuests = (room.Bed == Room.BedType.Enkelsäng ? 1 : 2) + room.ExtraBed;
             while (true)
             {
                 Console.Write("Skriv antalet gäster: ");
-                if (int.TryParse(Console.ReadLine(), out int guests) && guests > 0)
+                if (int.TryParse(Console.ReadLine(), out int guests) && guests > 0 && guests <= maxGuests)
                     return guests;
 
-                Console.WriteLine("Ogiltigt antal gäster. Ange ett positivt heltal.");
+                Console.WriteLine($"Ogiltigt antal gäster. Ange ett positivt heltal upp till {maxGuests}.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
             }
         }
 
@@ -274,6 +305,8 @@ namespace Hotel.Controller
                     return guestId;
 
                 Console.WriteLine("Ogiltigt gästID. Ange ett positivt heltal.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
             }
         }
     }
