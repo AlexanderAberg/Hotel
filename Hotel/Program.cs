@@ -9,7 +9,7 @@ namespace Hotel
 {
     public class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             using var dbContext = DataInitializer.Build();
             DataInitializer.InitializeData(dbContext);

@@ -68,6 +68,7 @@ namespace Hotel.Controller
                 var newBooking = new Booking()
                 {
                     Room = room,
+                    RoomNumber = room.RoomNumber,
                     CheckIn = checkInDate,
                     CheckOut = checkOutDate,
                     NumberOfGuests = numberOfGuests,
@@ -181,17 +182,18 @@ namespace Hotel.Controller
 
             var bookings = _bookingService.GetBookings();
 
+            Console.WriteLine("Booking Id\tRoom Number\tCheck In\tCheck Out\tNumber of Guests\tIs Paid\tGuest Name");
+
             if (bookings == null || bookings.Count == 0)
             {
                 Console.WriteLine("Inga bokningar kan hittas");
-                return;
             }
-
-            Console.WriteLine("Booking Id\tRoom Number\tCheck In\tCheck Out\tNumber of Guests\tIs Paid\tGuest Name");
-
-            foreach (Booking booking in bookings)
+            else
             {
-                Console.WriteLine($"{booking.BookingId}\t{booking.Room?.RoomNumber}\t{booking.CheckIn}\t{booking.CheckOut}\t{booking.NumberOfGuests}\t{booking.IsPaid}\t{booking.Guest?.FirstName + " " + booking.Guest?.LastName}");
+                foreach (Booking booking in bookings)
+                {
+                    Console.WriteLine($"{booking.BookingId}\t{booking.Room?.RoomNumber}\t{booking.CheckIn}\t{booking.CheckOut}\t{booking.NumberOfGuests}\t{booking.IsPaid}\t{booking.Guest?.FirstName + " " + booking.Guest?.LastName}");
+                }
             }
 
             Console.WriteLine("Tryck på valfri tangent för att återgå till menyn");

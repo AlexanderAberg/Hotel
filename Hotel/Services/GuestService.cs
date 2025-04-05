@@ -36,7 +36,7 @@ namespace Hotel.Services
         }
 
 
-        public Guest GetGuest(int guestId)
+        public Guest? GetGuest(int guestId)
         {
             var guest = _dbContext.Guests.Find(guestId);
             if (guest == null)

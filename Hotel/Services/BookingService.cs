@@ -92,13 +92,19 @@ namespace Hotel.Services
 
         public List<Booking> GetBookings()
         {
-            return [.. dbContext.Bookings
+            return dbContext.Bookings
                 .Include(b => b.Room)
-                .Include(b => b.Guest)];
+                .Include(b => b.Guest)
+                .ToList();
         }
 
         public bool IsRoomAvailable(Room room, DateTime checkIn, DateTime checkOut)
         {
+            if (checkIn >= checkOut)
+            {
+                throw new ArgumentException("Incheckningsdatum måste vara innan utcheckningdatumet.");
+            }
+
             return dbContext.Bookings
                 .Where(b => b.RoomNumber == room.RoomNumber)
                 .All(b => b.CheckOut <= checkIn || b.CheckIn >= checkOut);

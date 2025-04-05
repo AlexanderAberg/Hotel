@@ -13,6 +13,16 @@ namespace Hotel.Entities
         public Booking()
         {
             BookingId = _nextBookingId++;
+            Room = new Room { RoomNumber = string.Empty };
+            Guest = new Guest
+            {
+                FirstName = string.Empty,
+                LastName = string.Empty,
+                Email = string.Empty,
+                City = string.Empty,
+                Phone = string.Empty
+            };
+            RoomNumber = string.Empty;
         }
 
         public int BookingId { get; private set; }
@@ -24,7 +34,7 @@ namespace Hotel.Entities
         public virtual Guest Guest { get; set; }
         public bool IsAvailable { get; internal set; }
 
-        public string RoomNumber { get; set; }
+        public required string RoomNumber { get; set; }
         public int GuestId { get; set; }
 
         public string GetFormattedBookingId()
