@@ -18,7 +18,7 @@ namespace Hotel.Entities
             Dubbelsäng,
         }
         public BedType Bed { get; set; }
-        [Range(0, 4, ErrorMessage = "Det går bara att välja från inga extra sängar upp till 4 extra sängar")]
+        [Range(0, 2, ErrorMessage = "Det går bara att välja från inga extra sängar upp till 2 extra sängar")]
 
         public int ExtraBed { get; set; }
     }
