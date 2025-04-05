@@ -65,7 +65,7 @@ namespace Hotel.Controller
                 Console.Write("Är bokningen betald? (true/false): ");
                 bool isPaid = Convert.ToBoolean(Console.ReadLine());
 
-                var newBooking = new Booking()
+                var booking = new Booking()
                 {
                     Room = room,
                     RoomNumber = room.RoomNumber,
@@ -78,8 +78,8 @@ namespace Hotel.Controller
 
                 try
                 {
-                    _bookingService.CreateBooking(newBooking);
-                    Console.WriteLine($"Bokningen har skapats med ID: {newBooking.BookingId}");
+                    _bookingService.CreateBooking(booking);
+                    Console.WriteLine($"Bokningen har skapats med ID: {booking.BookingId}");
                     Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
                     Console.ReadKey();
                 }
@@ -88,11 +88,15 @@ namespace Hotel.Controller
                     Console.WriteLine($"Ett fel uppstod vid bokningsskapandet: {ex.Message}");
                     if (ex.InnerException != null)
                         Console.WriteLine($"Teknisk information: {ex.InnerException.Message}");
+                    Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                    Console.ReadKey();
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Ett oväntat fel uppstod: {ex.Message}");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
             }
         }
 

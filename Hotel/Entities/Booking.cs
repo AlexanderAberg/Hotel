@@ -8,11 +8,8 @@ namespace Hotel.Entities
 {
     public class Booking
     {
-        private static int _nextBookingId = 0000001;
-
         public Booking()
         {
-            BookingId = _nextBookingId++;
             Room = new Room { RoomNumber = string.Empty };
             Guest = new Guest
             {
@@ -25,7 +22,7 @@ namespace Hotel.Entities
             RoomNumber = string.Empty;
         }
 
-        public int BookingId { get; private set; }
+        public int BookingId { get; set; }
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
         public int NumberOfGuests { get; set; }
