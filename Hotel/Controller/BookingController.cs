@@ -269,10 +269,10 @@ namespace Hotel.Controller
 
                 if (DateTime.TryParse(dateInput, out DateTime date))
                 {
-                    if (date >= DateTime.Now)
+                    if (date.Date >= DateTime.Now.Date)
                         return date;
                     else
-                        Console.WriteLine("Datumet måste vara i framtiden.");
+                        Console.WriteLine("Datumet måste vara idag eller i framtiden.");
                 }
                 else
                     Console.WriteLine("Ogiltigt datum. Använd formatet ÅÅÅÅ-MM-DD.");
