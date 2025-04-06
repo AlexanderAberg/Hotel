@@ -23,9 +23,7 @@ namespace Hotel.Menus
                 Console.WriteLine("1. Gäster");
                 Console.WriteLine("2. Rum");
                 Console.WriteLine("3. Bokning");
-                Console.WriteLine("4. Checka in gäst");
-                Console.WriteLine("5. Checka ut gäst");
-                Console.WriteLine("6. Gästbetalning för bokning");
+                Console.WriteLine("4. Gästbetalning för bokning");
                 Console.WriteLine("0. Avsluta");
                 var choice = Console.ReadLine();
 
@@ -45,14 +43,6 @@ namespace Hotel.Menus
                         BookingMenu();
                         break;
                     case "4":
-                        Console.Clear();
-                        guestController.CheckInGuest();
-                        break;
-                    case "5":
-                        Console.Clear();
-                        guestController.CheckOutGuest();
-                        break;
-                    case "6":
                         Console.Clear();
                         guestController.GuestPaidBooking();
                         break;
