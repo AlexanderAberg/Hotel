@@ -11,6 +11,8 @@ namespace Hotel.Services
 {
     public class BookingService(ApplicationDbContext dbContext)
     {
+        private readonly ApplicationDbContext _dbContext = dbContext;
+
         public void CreateBooking(Booking booking)
         {
             ArgumentNullException.ThrowIfNull(booking);
@@ -21,31 +23,28 @@ namespace Hotel.Services
             if (booking.NumberOfGuests < 1)
                 throw new ArgumentException("Antal gäster måste vara minst 1");
 
-            if ((booking.CheckIn - DateTime.Now).TotalDays <= 10)
-                booking.IsPaid = true;
-            else
-                booking.IsPaid = false;
-            if ((booking.CheckIn - DateTime.Now).TotalDays <= 10)
-                booking.IsPaid = true;
-            else
-                booking.IsPaid = false;
-            if ((booking.CheckIn - DateTime.Now).TotalDays < 10)
-                booking.IsPaid = true;
-            else
-                throw new ArgumentException("Bokningen måste betalas direkt, eftersom det är färre än 10 dagar till vistelse");
-            
+            booking.CreatedDate = DateTime.Now;
+            booking.PaymentDueDate = booking.CreatedDate.AddDays(10);
 
-            dbContext.Bookings.Add(booking);
-            dbContext.SaveChanges();
+            if ((booking.CheckIn - DateTime.Now).TotalDays <= 10)
+            {
+                booking.IsPaid = true;
+            }
+            else
+            {
+                booking.IsPaid = false;
+            }
+
+            _dbContext.Bookings.Add(booking);
+            _dbContext.SaveChanges();
             string successMessage = $"Bokning med ID {booking.BookingId} skapades framgångsrikt.";
             Console.WriteLine(successMessage);
             Console.ReadLine();
         }
 
-
         public Booking? GetBooking(int bookingId)
         {
-            return dbContext.Bookings
+            return _dbContext.Bookings
                 .Include(b => b.Room)
                 .Include(b => b.Guest)
                 .FirstOrDefault(b => b.BookingId == bookingId);
@@ -53,7 +52,7 @@ namespace Hotel.Services
 
         public string UpdateBooking(int bookingId, Booking booking)
         {
-            var existingBooking = dbContext.Bookings.Find(bookingId);
+            var existingBooking = _dbContext.Bookings.Find(bookingId);
             if (existingBooking == null)
             {
                 return "Kan inte hitta bokningen";
@@ -66,22 +65,22 @@ namespace Hotel.Services
             existingBooking.Room = booking.Room;
             existingBooking.Guest = booking.Guest;
 
-            dbContext.Bookings.Update(existingBooking);
-            dbContext.SaveChanges();
+            _dbContext.Bookings.Update(existingBooking);
+            _dbContext.SaveChanges();
 
             return "Bokningen uppdaterades";
         }
 
         public string DeleteBooking(Booking booking)
         {
-            dbContext.Bookings.Remove(booking);
-            dbContext.SaveChanges();
+            _dbContext.Bookings.Remove(booking);
+            _dbContext.SaveChanges();
             return "Bokningen togs bort";
         }
 
         public string PayBooking(Booking booking)
         {
-            var existingBooking = dbContext.Bookings.Find(booking.BookingId);
+            var existingBooking = _dbContext.Bookings.Find(booking.BookingId);
             if (existingBooking == null)
             {
                 return "Kan inte hitta bokningen";
@@ -93,15 +92,15 @@ namespace Hotel.Services
             }
 
             existingBooking.IsPaid = true;
-            dbContext.Bookings.Update(existingBooking);
-            dbContext.SaveChanges();
+            _dbContext.Bookings.Update(existingBooking);
+            _dbContext.SaveChanges();
 
             return "Bokningen betalades";
         }
 
         public List<Booking> GetBookings()
         {
-            return dbContext.Bookings
+            return _dbContext.Bookings
                 .Include(b => b.Room)
                 .Include(b => b.Guest)
                 .ToList();
@@ -114,9 +113,22 @@ namespace Hotel.Services
                 throw new ArgumentException("Incheckningsdatum måste vara innan utcheckningdatumet.");
             }
 
-            return dbContext.Bookings
+            return _dbContext.Bookings
                 .Where(b => b.RoomNumber == room.RoomNumber)
                 .All(b => b.CheckOut <= checkIn || b.CheckIn >= checkOut);
+        }
+        public void RemoveUnpaidBookings()
+        {
+            var unpaidBookings = _dbContext.Bookings
+                .Where(b => !b.IsPaid && b.PaymentDueDate < DateTime.Now)
+                .ToList();
+
+            if (unpaidBookings.Any())
+            {
+                _dbContext.Bookings.RemoveRange(unpaidBookings);
+                _dbContext.SaveChanges();
+                Console.WriteLine($"{unpaidBookings.Count} obetalda bokningar har tagits bort.");
+            }
         }
     }
 }

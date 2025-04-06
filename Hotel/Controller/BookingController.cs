@@ -68,8 +68,18 @@ namespace Hotel.Controller
                     return;
                 }
 
-                Console.Write("Är bokningen betald? (true/false): ");
-                bool isPaid = Convert.ToBoolean(Console.ReadLine());
+                bool isPaid = false;
+                TimeSpan timeUntilCheckIn = checkInDate - DateTime.Now;
+                if (timeUntilCheckIn.TotalDays <= 10)
+                {
+                    Console.WriteLine("Det är 10 eller färre dagar kvar till incheckning. Bokningen måste betalas nu.");
+                    isPaid = true;
+                }
+                else
+                {
+                    Console.Write("Är bokningen betald? (true/false): ");
+                    isPaid = Convert.ToBoolean(Console.ReadLine());
+                }
 
                 var booking = new Booking()
                 {
@@ -110,57 +120,65 @@ namespace Hotel.Controller
             Booking? existingBooking = _bookingService.GetBooking(bookingId);
             if (existingBooking == null)
             {
-                Console.WriteLine("Bokningen kan inte hittas.");
-                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                Console.ReadKey();
-                return;
+                throw new Exception("Bokningen kan inte hittas.");
             }
 
-            Console.WriteLine("Skriv in rumsnummer");
+            Console.WriteLine("Skriv in rumsnummer (lämna tomt för att behålla befintlig information)");
             string? roomNumber = Console.ReadLine();
-            if (string.IsNullOrEmpty(roomNumber))
+            if (!string.IsNullOrWhiteSpace(roomNumber))
             {
-                Console.WriteLine("Rumsnummer kan inte vara tomt.");
-                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                Console.ReadKey();
-                return;
+                Room? room = _roomService.GetRoom(roomNumber);
+                if (room == null)
+                {
+                    throw new Exception("Rummet existerar inte.");
+                }
+                existingBooking.Room = room;
             }
 
-            Room? room = _roomService.GetRoom(roomNumber);
-            if (room == null)
+            Console.WriteLine("Skriv in incheckningsdatum (lämna tomt för att behålla befintlig information)");
+            string? checkInDateInput = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(checkInDateInput))
             {
-                Console.WriteLine("Rummet existerar inte.");
-                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                Console.ReadKey();
-                return;
+                DateTime checkInDate = Convert.ToDateTime(checkInDateInput);
+                existingBooking.CheckIn = checkInDate;
             }
 
-            Console.WriteLine("Skriv in incheckningsdatum");
-            DateTime checkInDate = Convert.ToDateTime(Console.ReadLine());
-            Console.WriteLine("Skriv in utcheckningsdatum");
-            DateTime checkOutDate = Convert.ToDateTime(Console.ReadLine());
-            Console.WriteLine("Skriv in antalet gäster");
-            int numberOfGuests = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Skriv in betalningsstatus (true/false)");
-            bool isPaid = Convert.ToBoolean(Console.ReadLine());
-            Console.WriteLine("Skriv in gästId");
-            int guestId = Convert.ToInt32(Console.ReadLine());
-
-            Guest? guest = _guestService.GetGuest(guestId);
-            if (guest == null)
+            Console.WriteLine("Skriv in utcheckningsdatum (lämna tomt för att behålla befintlig information)");
+            string? checkOutDateInput = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(checkOutDateInput))
             {
-                Console.WriteLine("Kan inte hitta gäst.");
-                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                Console.ReadKey();
-                return;
+                DateTime checkOutDate = Convert.ToDateTime(checkOutDateInput);
+                existingBooking.CheckOut = checkOutDate;
             }
 
-            existingBooking.Room = room;
-            existingBooking.CheckIn = checkInDate;
-            existingBooking.CheckOut = checkOutDate;
-            existingBooking.NumberOfGuests = numberOfGuests;
-            existingBooking.IsPaid = isPaid;
-            existingBooking.Guest = guest;
+            Console.WriteLine("Skriv in antalet gäster (lämna tomt för att behålla befintlig information)");
+            string? numberOfGuestsInput = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(numberOfGuestsInput))
+            {
+                int numberOfGuests = Convert.ToInt32(numberOfGuestsInput);
+                existingBooking.NumberOfGuests = numberOfGuests;
+            }
+
+            Console.WriteLine("Skriv in betalningsstatus (true/false) (lämna tomt för att behålla befintlig information)");
+            string? isPaidInput = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(isPaidInput))
+            {
+                bool isPaid = Convert.ToBoolean(isPaidInput);
+                existingBooking.IsPaid = isPaid;
+            }
+
+            Console.WriteLine("Skriv in gästId (lämna tomt för att behålla befintlig information)");
+            string? guestIdInput = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(guestIdInput))
+            {
+                int guestId = Convert.ToInt32(guestIdInput);
+                Guest? guest = _guestService.GetGuest(guestId);
+                if (guest == null)
+                {
+                    throw new Exception("Kan inte hitta gäst.");
+                }
+                existingBooking.Guest = guest;
+            }
 
             _bookingService.UpdateBooking(bookingId, existingBooking);
             Console.WriteLine("Bokningen har uppdaterats.");
@@ -235,6 +253,14 @@ namespace Hotel.Controller
                 return;
             }
 
+            if (booking.IsPaid)
+            {
+                Console.WriteLine("Bokningen är redan betald.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
+                return;
+            }
+
             TimeSpan timeUntilCheckIn = booking.CheckIn - DateTime.Now;
             if (timeUntilCheckIn.TotalDays > 10)
             {
@@ -253,7 +279,8 @@ namespace Hotel.Controller
                 Console.WriteLine("Det är 10 eller färre dagar kvar till incheckning. Bokningen måste betalas nu.");
             }
 
-            _bookingService.PayBooking(booking);
+            booking.IsPaid = true;
+            _bookingService.UpdateBooking(bookingId, booking);
             Console.WriteLine("Bokningens betalning har gått igenom.");
             Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
             Console.ReadKey();

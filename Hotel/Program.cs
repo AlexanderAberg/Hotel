@@ -13,6 +13,8 @@ namespace Hotel
         {
             using var dbContext = DataInitializer.Build();
             DataInitializer.InitializeData(dbContext);
+            var bookingService = new BookingService(dbContext);
+            bookingService.RemoveUnpaidBookings();
             var menu = new Menu(dbContext);
             menu.Start(new RoomController(new RoomService(dbContext)));
         }

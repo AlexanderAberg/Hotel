@@ -8,78 +8,41 @@ using System.Threading.Tasks;
 
 namespace Hotel.Controller
 {
-    public class GuestController(GuestService guestService)
+    public class GuestController
     {
-        private readonly GuestService _guestService = guestService;
+        private readonly GuestService _guestService;
         private readonly RoomService? _roomService;
         private readonly BookingService? _bookingService;
 
+        public GuestController(GuestService guestService, RoomService? roomService = null, BookingService? bookingService = null)
+        {
+            _guestService = guestService;
+            _roomService = roomService;
+            _bookingService = bookingService;
+        }
+
         public void GuestPaidBooking()
         {
-            Console.WriteLine("Ange gästens ID för att markera att gästen har betalat för bokningen:");
-            Console.Write("> ");
-            if (int.TryParse(Console.ReadLine(), out int guestId))
+            Console.WriteLine("Skriv in bokningsId");
+            int bookingId = Convert.ToInt32(Console.ReadLine());
+            Booking? existingBooking = _bookingService?.GetBooking(bookingId);
+            if (existingBooking == null)
             {
-                var guest = _guestService.GetGuest(guestId);
-                if (guest != null)
-                {
-                    var booking = guest.Bookings.FirstOrDefault();
-                    if (booking != null)
-                    {
-                        if (!booking.IsPaid)
-                        {
-                            var daysUntilCheckIn = (booking.CheckIn - DateTime.Now).TotalDays;
-                            if (daysUntilCheckIn <= 10)
-                            {
-                                booking.IsPaid = true;
-                                _bookingService?.UpdateBooking(booking.BookingId, booking);
-                                Console.WriteLine("Bokningen har markerats som betald!");
-                                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                                Console.ReadKey();
-                            }
-                            else if (daysUntilCheckIn > 10 && (DateTime.Now - booking.CheckIn).TotalDays <= 10)
-                            {
-                                booking.IsPaid = true;
-                                _bookingService?.UpdateBooking(booking.BookingId, booking);
-                                Console.WriteLine("Bokningen har markerats som betald!");
-                                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                                Console.ReadKey();
-                            }
-                            else
-                            {
-                                Console.WriteLine("Bokningen har avbrutits eftersom betalningen inte gjordes inom 10 dagar.");
-                                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                                Console.ReadKey();
-                                _bookingService?.DeleteBooking(booking);
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Bokningen är redan betald.");
-                            Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                            Console.ReadKey();
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Gästen har ingen bokning.");
-                        Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                        Console.ReadKey();
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Gäst hittades inte.");
-                    Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                    Console.ReadKey();
-                }
+                Console.WriteLine("Bokningen kan inte hittas.");
+                return;
             }
-            else
+
+            if (existingBooking.IsPaid)
             {
-                Console.WriteLine("Ogiltigt ID.");
-                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                Console.ReadKey();
+                Console.WriteLine("Bokningen är redan betald.");
+                return;
             }
+
+            existingBooking.IsPaid = true;
+            _bookingService?.UpdateBooking(bookingId, existingBooking);
+            Console.WriteLine("Bokningen betalades.");
+            Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+            Console.ReadKey();
         }
 
         public void RegisterNewGuest()
@@ -116,7 +79,6 @@ namespace Hotel.Controller
             Console.WriteLine("Gästen har registrerats!");
             Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
             Console.ReadKey();
-
         }
 
         public static int ValidateSelection(int selectionMenuLimit)
@@ -128,13 +90,10 @@ namespace Hotel.Controller
                 if (int.TryParse(Console.ReadLine(), out int intSelection) && intSelection >= 0 && intSelection <= selectionMenuLimit)
                     return intSelection;
 
-
-
                 Console.WriteLine("Fel val");
                 Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
                 Console.ReadKey();
             }
-
         }
 
         public void EditGuestInformation()
@@ -256,7 +215,6 @@ namespace Hotel.Controller
             if (guests == null)
             {
                 Console.WriteLine("Gästlistan är tom.");
-
                 return;
             }
 
