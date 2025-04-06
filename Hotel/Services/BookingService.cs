@@ -25,6 +25,10 @@ namespace Hotel.Services
                 booking.IsPaid = true;
             else
                 booking.IsPaid = false;
+            if ((booking.CheckIn - DateTime.Now).TotalDays <= 10)
+                booking.IsPaid = true;
+            else
+                booking.IsPaid = false;
             if ((booking.CheckIn - DateTime.Now).TotalDays < 10)
                 booking.IsPaid = true;
             else
@@ -81,6 +85,11 @@ namespace Hotel.Services
             if (existingBooking == null)
             {
                 return "Kan inte hitta bokningen";
+            }
+
+            if (existingBooking.IsPaid)
+            {
+                return "Bokningen är redan betald";
             }
 
             existingBooking.IsPaid = true;

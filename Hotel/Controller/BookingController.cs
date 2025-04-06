@@ -22,7 +22,7 @@ namespace Hotel.Controller
             {
                 Console.WriteLine("Skriv in bokningsdetaljer");
 
-                string roomNumber = GetValidRoomNumber();
+                string roomNumber = GetValidRoomNumber(_roomService);
                 if (string.IsNullOrEmpty(roomNumber))
                     return;
 
@@ -85,9 +85,6 @@ namespace Hotel.Controller
                 try
                 {
                     _bookingService.CreateBooking(booking);
-                    Console.WriteLine($"Bokningen har skapats med ID: {booking.BookingId}");
-                    Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                    Console.ReadKey();
                 }
                 catch (Exception ex)
                 {
@@ -110,6 +107,15 @@ namespace Hotel.Controller
         {
             Console.WriteLine("Skriv in bokningsId");
             int bookingId = Convert.ToInt32(Console.ReadLine());
+            Booking? existingBooking = _bookingService.GetBooking(bookingId);
+            if (existingBooking == null)
+            {
+                Console.WriteLine("Bokningen kan inte hittas.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
+                return;
+            }
+
             Console.WriteLine("Skriv in rumsnummer");
             string? roomNumber = Console.ReadLine();
             if (string.IsNullOrEmpty(roomNumber))
@@ -119,6 +125,16 @@ namespace Hotel.Controller
                 Console.ReadKey();
                 return;
             }
+
+            Room? room = _roomService.GetRoom(roomNumber);
+            if (room == null)
+            {
+                Console.WriteLine("Rummet existerar inte.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
+                return;
+            }
+
             Console.WriteLine("Skriv in incheckningsdatum");
             DateTime checkInDate = Convert.ToDateTime(Console.ReadLine());
             Console.WriteLine("Skriv in utcheckningsdatum");
@@ -130,29 +146,10 @@ namespace Hotel.Controller
             Console.WriteLine("Skriv in gästId");
             int guestId = Convert.ToInt32(Console.ReadLine());
 
-            Room? room = _roomService.GetRoom(roomNumber);
             Guest? guest = _guestService.GetGuest(guestId);
-
-            if (room == null)
-            {
-                Console.WriteLine("Rummet existerar inte");
-                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                Console.ReadKey();
-                return;
-            }
-
             if (guest == null)
             {
                 Console.WriteLine("Kan inte hitta gäst.");
-                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
-                Console.ReadKey();
-                return;
-            }
-
-            Booking? existingBooking = _bookingService.GetBooking(bookingId);
-            if (existingBooking == null)
-            {
-                Console.WriteLine("Bokningen kan inte hittas.");
                 Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
                 Console.ReadKey();
                 return;
@@ -238,23 +235,41 @@ namespace Hotel.Controller
                 return;
             }
 
+            TimeSpan timeUntilCheckIn = booking.CheckIn - DateTime.Now;
+            if (timeUntilCheckIn.TotalDays > 10)
+            {
+                Console.WriteLine("Det är fler än 10 dagar kvar till incheckning. Vill du betala nu? (ja/nej)");
+                string? response = Console.ReadLine();
+                if (response?.ToLower() != "ja")
+                {
+                    Console.WriteLine("Du kan betala senare via alternativet i startmenyn.");
+                    Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                    Console.ReadKey();
+                    return;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Det är 10 eller färre dagar kvar till incheckning. Bokningen måste betalas nu.");
+            }
+
             _bookingService.PayBooking(booking);
             Console.WriteLine("Bokningens betalning har gått igenom.");
             Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
             Console.ReadKey();
         }
 
-        private static string GetValidRoomNumber()
+        private static string GetValidRoomNumber(RoomService roomService)
         {
             while (true)
             {
                 Console.Write("Skriv in rumsnummer: ");
                 string? roomNumber = Console.ReadLine();
 
-                if (!string.IsNullOrWhiteSpace(roomNumber))
+                if (!string.IsNullOrWhiteSpace(roomNumber) && roomService.GetRoom(roomNumber) != null)
                     return roomNumber;
 
-                Console.WriteLine("Rumsnummer kan inte vara tomt. Försök igen.");
+                Console.WriteLine("Ogiltigt rumsnummer. Försök igen.");
                 Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
                 Console.ReadKey();
             }
