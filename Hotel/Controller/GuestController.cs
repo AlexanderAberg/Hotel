@@ -26,38 +26,59 @@ namespace Hotel.Controller
                     var booking = guest.Bookings.FirstOrDefault();
                     if (booking != null)
                     {
-                        var daysUntilCheckIn = (booking.CheckIn - DateTime.Now).TotalDays;
-                        if (daysUntilCheckIn <= 10)
+                        if (!booking.IsPaid)
                         {
-                            booking.IsPaid = true;
-                            _bookingService?.UpdateBooking(booking.BookingId, booking);
-                            Console.WriteLine("Bokningen har markerats som betald!");
-                        }
-                        else if (daysUntilCheckIn > 10 && (DateTime.Now - booking.CheckIn).TotalDays <= 10)
-                        {
-                            booking.IsPaid = true;
-                            _bookingService?.UpdateBooking(booking.BookingId, booking);
-                            Console.WriteLine("Bokningen har markerats som betald!");
+                            var daysUntilCheckIn = (booking.CheckIn - DateTime.Now).TotalDays;
+                            if (daysUntilCheckIn <= 10)
+                            {
+                                booking.IsPaid = true;
+                                _bookingService?.UpdateBooking(booking.BookingId, booking);
+                                Console.WriteLine("Bokningen har markerats som betald!");
+                                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                                Console.ReadKey();
+                            }
+                            else if (daysUntilCheckIn > 10 && (DateTime.Now - booking.CheckIn).TotalDays <= 10)
+                            {
+                                booking.IsPaid = true;
+                                _bookingService?.UpdateBooking(booking.BookingId, booking);
+                                Console.WriteLine("Bokningen har markerats som betald!");
+                                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                                Console.ReadKey();
+                            }
+                            else
+                            {
+                                Console.WriteLine("Bokningen har avbrutits eftersom betalningen inte gjordes inom 10 dagar.");
+                                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                                Console.ReadKey();
+                                _bookingService?.DeleteBooking(booking);
+                            }
                         }
                         else
                         {
-                            Console.WriteLine("Bokningen har avbrutits eftersom betalningen inte gjordes inom 10 dagar.");
-                            _bookingService?.DeleteBooking(booking);
+                            Console.WriteLine("Bokningen är redan betald.");
+                            Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                            Console.ReadKey();
                         }
                     }
                     else
                     {
                         Console.WriteLine("Gästen har ingen bokning.");
+                        Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                        Console.ReadKey();
                     }
                 }
                 else
                 {
                     Console.WriteLine("Gäst hittades inte.");
+                    Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                    Console.ReadKey();
                 }
             }
             else
             {
                 Console.WriteLine("Ogiltigt ID.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
             }
         }
 
@@ -93,6 +114,8 @@ namespace Hotel.Controller
             _guestService.CreateGuest(newGuest);
 
             Console.WriteLine("Gästen har registrerats!");
+            Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+            Console.ReadKey();
 
         }
 
@@ -108,6 +131,8 @@ namespace Hotel.Controller
 
 
                 Console.WriteLine("Fel val");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
             }
 
         }
@@ -161,11 +186,15 @@ namespace Hotel.Controller
                 else
                 {
                     Console.WriteLine("Gäst hittades inte.");
+                    Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                    Console.ReadKey();
                 }
             }
             else
             {
                 Console.WriteLine("Ogiltigt ID.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
             }
         }
 
@@ -190,24 +219,34 @@ namespace Hotel.Controller
                                 _bookingService?.DeleteBooking(booking);
                             }
                             Console.WriteLine("Alla gästens bokningar har tagits bort.");
+                            Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                            Console.ReadKey();
                         }
                         else
                         {
                             Console.WriteLine("Det finns aktiva bokningar på gästen, därför har gästen inte tagits bort.");
+                            Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                            Console.ReadKey();
                             return;
                         }
                     }
                     _guestService.RemoveGuest(guestId);
                     Console.WriteLine("Gästen har tagits bort.");
+                    Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                    Console.ReadKey();
                 }
                 else
                 {
                     Console.WriteLine("Gäst hittades inte.");
+                    Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                    Console.ReadKey();
                 }
             }
             else
             {
                 Console.WriteLine("Ogiltigt ID.");
+                Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
             }
         }
 
@@ -216,7 +255,8 @@ namespace Hotel.Controller
             var guests = _guestService.GetGuests();
             if (guests == null)
             {
-                Console.WriteLine("Guests list is null.");
+                Console.WriteLine("Gästlistan är tom.");
+
                 return;
             }
 
