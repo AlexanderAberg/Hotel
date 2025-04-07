@@ -23,12 +23,15 @@ namespace Hotel.Services
             if (booking.NumberOfGuests < 1)
                 throw new ArgumentException("Antal gäster måste vara minst 1");
 
-            booking.CreatedDate = DateTime.Now;
-            booking.PaymentDueDate = booking.CreatedDate.AddDays(10);
+            booking.PaymentDueDate = booking.CheckIn.AddDays(-10);
+
+            Console.WriteLine($"Incheckningsdatum: {booking.CheckIn:yyyy-MM-dd}");
+            Console.WriteLine($": {booking.PaymentDueDate:yyyy-MM-dd} (10 dagarar före incheckning)");
 
             if ((booking.CheckIn - DateTime.Now).TotalDays <= 10)
             {
                 booking.IsPaid = true;
+                Console.WriteLine("Incheckning inom 10 dagar - ,måste betalas direkt");
             }
             else
             {
@@ -37,9 +40,10 @@ namespace Hotel.Services
 
             _dbContext.Bookings.Add(booking);
             _dbContext.SaveChanges();
-            string successMessage = $"Bokning med ID {booking.BookingId} skapades framgångsrikt.";
-            Console.WriteLine(successMessage);
-            Console.ReadLine();
+
+            Console.WriteLine($"Bokning skapad: ID={booking.BookingId}, Är betald?={booking.IsPaid}, Sista betalningsdag={booking.PaymentDueDate:yyyy-MM-dd}");
+            Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+            Console.ReadKey();
         }
 
         public Booking? GetBooking(int bookingId)
@@ -119,16 +123,66 @@ namespace Hotel.Services
         }
         public void RemoveUnpaidBookings()
         {
-            var unpaidBookings = _dbContext.Bookings
-                .Where(b => !b.IsPaid && b.PaymentDueDate < DateTime.Now)
+            var bookingsToFix = _dbContext.Bookings
+                .Where(b => b.PaymentDueDate > b.CheckIn)
                 .ToList();
+
+            var allBookings = _dbContext.Bookings.ToList();
+            Console.WriteLine($"Totalt antal bokningar: {allBookings.Count}");
+
+            foreach (var booking in allBookings)
+            {
+                bool isPastDue = booking.PaymentDueDate.Date < DateTime.Now.Date;
+                bool isUnpaid = booking.IsPaid == false;
+
+                Console.WriteLine($"Bokning {booking.BookingId}: " +
+                    $"Incheckning={booking.CheckIn:yyyy-MM-dd}, " +
+                    $"Är betald?={booking.IsPaid}, " +
+                    $"Sista inbetalningsdag={booking.PaymentDueDate:yyyy-MM-dd}, " +
+                    $"Nu={DateTime.Now:yyyy-MM-dd}, " +
+                    $"Har passerat sista inbetalningsdag={isPastDue}, " +
+                    $"Är obetald={isUnpaid}");
+            }
+
+            var unpaidBookings = _dbContext.Bookings
+                .AsEnumerable()
+                .Where(b => b.IsPaid == false && b.PaymentDueDate.Date < DateTime.Now.Date)
+                .ToList();
+
+            Console.WriteLine($"Hittade {unpaidBookings.Count} obetalade bokningar att ta bort.");
+
+            foreach (var booking in unpaidBookings)
+            {
+                Console.WriteLine($"Att ta bort: Booking ID: {booking.BookingId}, " +
+                    $"Sista inbetalningsdag: {booking.PaymentDueDate:yyyy-MM-dd}, " +
+                    $"Är betald?: {booking.IsPaid}");
+            }
 
             if (unpaidBookings.Any())
             {
-                _dbContext.Bookings.RemoveRange(unpaidBookings);
-                _dbContext.SaveChanges();
-                Console.WriteLine($"{unpaidBookings.Count} obetalda bokningar har tagits bort.");
+                try
+                {
+                    foreach (var booking in unpaidBookings)
+                    {
+                        _dbContext.Bookings.Remove(booking);
+                    }
+                    _dbContext.SaveChanges();
+                    Console.WriteLine("Obetalda bokningar borttagna.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Fel på borttagning av bokning: {ex.Message}");
+                    if (ex.InnerException != null)
+                        Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                }
             }
+            else
+            {
+                Console.WriteLine("Inga obetalda bokningar att ta bort.");
+            }
+
+            Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+            Console.ReadKey();
         }
     }
 }

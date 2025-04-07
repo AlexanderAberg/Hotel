@@ -89,7 +89,8 @@ namespace Hotel.Controller
                     CheckOut = checkOutDate,
                     NumberOfGuests = numberOfGuests,
                     IsPaid = isPaid,
-                    Guest = guest
+                    Guest = guest,
+                    PaymentDueDate = checkInDate.AddDays(-10)
                 };
 
                 try

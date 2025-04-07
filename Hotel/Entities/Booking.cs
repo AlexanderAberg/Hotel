@@ -33,7 +33,6 @@ namespace Hotel.Entities
 
         public required string RoomNumber { get; set; }
         public int GuestId { get; set; }
-        public DateTime CreatedDate { get; internal set; }
         public DateTime PaymentDueDate { get; internal set; }
 
         public string GetFormattedBookingId()
