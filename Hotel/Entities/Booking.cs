@@ -22,9 +22,21 @@ namespace Hotel.Entities
             RoomNumber = string.Empty;
         }
 
+        private DateTime _checkIn;
+        public DateTime CheckIn
+        {
+            get => _checkIn;
+            set => _checkIn = value.Date;
+        }
+
+        private DateTime _checkOut;
+        public DateTime CheckOut
+        {
+            get => _checkOut;
+            set => _checkOut = value.Date;
+        }
+
         public int BookingId { get; set; }
-        public DateTime CheckIn { get; set; }
-        public DateTime CheckOut { get; set; }
         public int NumberOfGuests { get; set; }
         public bool IsPaid { get; set; }
         public virtual Room Room { get; set; }
@@ -33,7 +45,13 @@ namespace Hotel.Entities
 
         public required string RoomNumber { get; set; }
         public int GuestId { get; set; }
-        public DateTime PaymentDueDate { get; internal set; }
+
+        private DateTime _paymentDueDate;
+        public DateTime PaymentDueDate
+        {
+            get => _paymentDueDate;
+            internal set => _paymentDueDate = value.Date;
+        }
 
         public string GetFormattedBookingId()
         {
